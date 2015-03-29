@@ -57,10 +57,34 @@ class Fsm
         return false;
     }
 
+    public function hasStartState()
+    {
+        foreach ($this->states as $state) {
+            if ($state->getType() == FsmState::TYPE_START) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasEndState()
+    {
+        foreach ($this->states as $state) {
+            if ($state->getType() == FsmState::TYPE_END) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function addState(FsmState $state)
     {
         if ($this->hasStateByName($state->getName())) {
             throw new Exception\DuplicateStateException($this, $state->getName());
+        }
+
+        if ($state->getType() == FsmState::TYPE_START && $this->hasStartState()) {
+            throw new Exception\MultipleStartStatesException($this);
         }
 
         $this->states[] = $state;

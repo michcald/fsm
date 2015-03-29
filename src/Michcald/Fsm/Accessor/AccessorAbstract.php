@@ -30,6 +30,11 @@ abstract class AccessorAbstract implements AccessorInterface
             throw new Exception\InvalidObjectForAccessorException($this, $object);
         }
 
+        // verify if the FSM has a starting state
+        if (!$this->fsm->hasStartState()) {
+            throw new Exception\MissingStartStateException($this->fsm);
+        }
+
         $currentStateName = $this->getCurrentStateName($object);
 
         // verify the transaction
