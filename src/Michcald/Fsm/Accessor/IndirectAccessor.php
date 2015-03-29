@@ -11,9 +11,9 @@ class IndirectAccessor extends AccessorAbstract
         return $object->getFsmState($this->fsm->getName());
     }
 
-    protected function setCurrentStateName(FsmInterface $object, FsmState $state)
+    protected function setCurrentStateName(FsmInterface $object, $stateName)
     {
-        $object->setFsmState($this->fsm->getName(), $state->getName());
+        $object->setFsmState($this->fsm->getName(), $stateName);
 
         return $this;
     }
