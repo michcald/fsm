@@ -3,6 +3,7 @@
 namespace Michcald\Fsm\Exception;
 
 use Michcald\Fsm\Model\Fsm;
+use Michcald\Fsm\Interfaces\FsmInterface;
 
 class InvalidObjectClassException extends \Exception
 {

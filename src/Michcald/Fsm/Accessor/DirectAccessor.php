@@ -4,6 +4,7 @@ namespace Michcald\Fsm\Accessor;
 
 use Michcald\Fsm\Interfaces\FsmInterface;
 use Michcald\Fsm\Model\Fsm;
+use Michcald\Fsm\Validator\ValidatorInterface;
 
 class DirectAccessor extends AccessorAbstract
 {
@@ -11,9 +12,9 @@ class DirectAccessor extends AccessorAbstract
 
     private $propertyGetter;
 
-    public function __construct(Fsm $fsm, $objectClass, $propertySetter, $propertyGetter)
+    public function __construct(Fsm $fsm, $objectClass, ValidatorInterface $validator, $propertySetter, $propertyGetter)
     {
-        parent::__construct($fsm, $objectClass);
+        parent::__construct($fsm, $objectClass, $validator);
 
         $this->propertySetter = $propertySetter;
         $this->propertyGetter = $propertyGetter;

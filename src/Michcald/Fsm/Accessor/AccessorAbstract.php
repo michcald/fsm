@@ -6,6 +6,7 @@ use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Interfaces\FsmInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Exception;
+use Michcald\Fsm\Model\FsmState;
 
 abstract class AccessorAbstract implements AccessorInterface
 {
@@ -22,6 +23,14 @@ abstract class AccessorAbstract implements AccessorInterface
         $this->validator = $validator;
     }
 
+    final public function validate($throwExceptions = true)
+    {
+        return $this
+            ->validator
+            ->validate($this->fsm, $throwExceptions)
+        ;
+    }
+
     final public function doTransaction(FsmInterface $object, $transactionName)
     {
         // verifying the object class
@@ -33,11 +42,6 @@ abstract class AccessorAbstract implements AccessorInterface
         if (!is_a($object, $this->getExpectedObjectInterface())) {
             throw new Exception\InvalidObjectForAccessorException($this, $object);
         }
-
-        $this
-            ->validator
-            ->validate($this->fsm)
-        ;
 
         $currentStateName = $this->getCurrentStateName($object);
 
@@ -59,6 +63,30 @@ abstract class AccessorAbstract implements AccessorInterface
         // execute transaction
 
         $this->setCurrentStateName($object, $transaction->getToStateName());
+    }
+
+    public function isInStartState(FsmInterface $object)
+    {
+        $currentStateName = $this->getCurrentStateName($object);
+
+        $currentState = $this
+            ->fsm
+            ->getStateByName($currentStateName)
+        ;
+
+        return $currentState && $currentState->getType() == FsmState::TYPE_START;
+    }
+
+    public function isInEndState(FsmInterface $object)
+    {
+        $currentStateName = $this->getCurrentStateName($object);
+
+        $currentState = $this
+            ->fsm
+            ->getStateByName($currentStateName)
+        ;
+
+        return $currentState && $currentState->getType() == FsmState::TYPE_END;
     }
 
     abstract protected function getCurrentStateName(FsmInterface $object);
