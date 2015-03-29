@@ -1,0 +1,25 @@
+{
+    "name": "michcald/fsm",
+    "description": "Finite State Machine Library for PHP",
+    "license": "GNU GENERAL PUBLIC LICENSE",
+    "keywords": ["michcald", "fsm", "finite", "state", "machine"],
+    "authors": [
+        {
+            "name": "Michael Caldera",
+            "email": "michcald@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "fabpot/php-cs-fixer": "2.0.*@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Michcald\\Fsm\\": "src/"
+        }
+    }
+}
