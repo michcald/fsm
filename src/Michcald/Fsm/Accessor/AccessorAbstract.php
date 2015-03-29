@@ -4,6 +4,7 @@ namespace Michcald\Fsm\Accessor;
 
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Interfaces\FsmInterface;
+use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Exception;
 
 abstract class AccessorAbstract implements AccessorInterface
@@ -12,10 +13,13 @@ abstract class AccessorAbstract implements AccessorInterface
 
     protected $objectClass;
 
-    public function __construct(Fsm $fsm, $objectClass)
+    protected $validator;
+
+    public function __construct(Fsm $fsm, $objectClass, ValidatorInterface $validator)
     {
         $this->fsm = $fsm;
         $this->objectClass = $objectClass;
+        $this->validator = $validator;
     }
 
     final public function doTransaction(FsmInterface $object, $transactionName)
@@ -30,10 +34,10 @@ abstract class AccessorAbstract implements AccessorInterface
             throw new Exception\InvalidObjectForAccessorException($this, $object);
         }
 
-        // verify if the FSM has a starting state
-        if (!$this->fsm->hasStartState()) {
-            throw new Exception\MissingStartStateException($this->fsm);
-        }
+        $this
+            ->validator
+            ->validate($this->fsm)
+        ;
 
         $currentStateName = $this->getCurrentStateName($object);
 
