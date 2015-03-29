@@ -2,8 +2,6 @@
 
 namespace Michcald\Fsm\Model;
 
-use Michcald\Fsm\Exception;
-
 class Fsm
 {
     /**
@@ -79,14 +77,6 @@ class Fsm
 
     public function addState(FsmState $state)
     {
-        if ($this->hasStateByName($state->getName())) {
-            throw new Exception\DuplicateStateException($this, $state->getName());
-        }
-
-        if ($state->getType() == FsmState::TYPE_START && $this->hasStartState()) {
-            throw new Exception\MultipleStartStatesException($this);
-        }
-
         $this->states[] = $state;
 
         return $this;
@@ -117,18 +107,6 @@ class Fsm
 
     public function addTransaction(FsmTransaction $transaction)
     {
-        if ($this->hasTransactionByName($transaction->getName())) {
-            throw new Exception\DuplicateTransactionException($this, $transaction->getName());
-        }
-
-        if (!$this->hasStateByName($transaction->getFromStateName())) {
-            throw new Exception\StateNotFoundException($this, $transaction->getFromStateName());
-        }
-
-        if (!$this->hasStateByName($transaction->getToStateName())) {
-            throw new Exception\StateNotFoundException($this, $transaction->getToStateName());
-        }
-
         $this->transactions[] = $transaction;
 
         return $this;
