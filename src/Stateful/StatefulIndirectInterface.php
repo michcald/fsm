@@ -1,8 +1,8 @@
 <?php
 
-namespace Michcald\Fsm\Interfaces;
+namespace Michcald\Fsm\Stateful;
 
-interface FsmIndirectInterface extends FsmInterface
+interface StatefulIndirectInterface extends StatefulInterface
 {
     public function getFsmState($fsmName);
 

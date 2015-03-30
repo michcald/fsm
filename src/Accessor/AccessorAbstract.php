@@ -3,7 +3,7 @@
 namespace Michcald\Fsm\Accessor;
 
 use Michcald\Fsm\Model\Fsm;
-use Michcald\Fsm\Interfaces\FsmInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Exception;
 use Michcald\Fsm\Model\FsmState;
@@ -31,7 +31,7 @@ abstract class AccessorAbstract implements AccessorInterface
         ;
     }
 
-    public function setInitialState(FsmInterface $object)
+    public function setInitialState(StatefulInterface $object)
     {
         $this
             ->validator
@@ -46,7 +46,7 @@ abstract class AccessorAbstract implements AccessorInterface
         return $this;
     }
 
-    public function doTransition(FsmInterface $object, $transitionName)
+    public function doTransition(StatefulInterface $object, $transitionName)
     {
         // verifying the object class
         if (!is_a($object, $this->objectClass)) {
@@ -85,7 +85,7 @@ abstract class AccessorAbstract implements AccessorInterface
         $this->setCurrentStateName($object, $transition->getToStateName());
     }
 
-    public function isInitialState(FsmInterface $object)
+    public function isInitialState(StatefulInterface $object)
     {
         $currentStateName = $this->getCurrentStateName($object);
 
@@ -97,7 +97,7 @@ abstract class AccessorAbstract implements AccessorInterface
         return $currentState && $currentState->getType() == FsmState::TYPE_INITIAL;
     }
 
-    public function isFinalState(FsmInterface $object)
+    public function isFinalState(StatefulInterface $object)
     {
         $currentStateName = $this->getCurrentStateName($object);
 
@@ -109,7 +109,7 @@ abstract class AccessorAbstract implements AccessorInterface
         return $currentState && $currentState->getType() == FsmState::TYPE_FINAL;
     }
 
-    abstract protected function getCurrentStateName(FsmInterface $object);
+    abstract protected function getCurrentStateName(StatefulInterface $object);
 
-    abstract protected function setCurrentStateName(FsmInterface $object, $stateName);
+    abstract protected function setCurrentStateName(StatefulInterface $object, $stateName);
 }

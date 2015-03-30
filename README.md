@@ -110,14 +110,14 @@ There is not a best way here, just choose what you prefer.
 
 This method allows you to define which setter/getter your Application Entity is using in order to map the property that contains the current state.
 
-First we define our Application Entity implementing the `FsmDirectInterface` interface.
+First we define our Application Entity implementing the `StatefulDirectInterface` interface.
 
 ```php
 namespace Whatever\Entity;
 
-use Michcald\Fsm\Interfaces\FsmDirectInterface;
+use Michcald\Fsm\Stateful\StatefulDirectInterface;
 
-class DocumentA implements FsmDirectInterface
+class DocumentA implements StatefulDirectInterface
 {
     private $myState;
 
@@ -156,14 +156,14 @@ $accessor->setInitialState($doc);
 
 This method provides a standard interface in order to access it your Application Entity to the property that contains the current state.
 
-Here, instead, we implement the `FmsIndirectInterface` and we are required to implement the `getFsmState()` and `setFsmState()` methods. These methods work as routers to the real class property.
+Here, instead, we implement the `StatefulIndirectInterface` and we are required to implement the `getFsmState()` and `setFsmState()` methods. These methods work as routers to the real class property.
 
 ```php
 namespace Whatever\Entity;
 
-use Michcald\Fsm\Interfaces\FsmIndirectInterface;
+use Michcald\Fsm\Stateful\StatefulIndirectInterface;
 
-class DocumentB implements FsmIndirectInterface
+class DocumentB implements StatefulIndirectInterface
 {
     private $myState1;
 
@@ -193,7 +193,7 @@ class DocumentB implements FsmIndirectInterface
 }
 ```
 
-Using the `FsmIndirectInterface` does not require to inject any extra arguments in the accessor object.
+Using the `StatefulIndirectInterface` does not require to inject any extra arguments in the accessor object.
 
 ```php
 $accessor = new IndirectAccessor(

@@ -3,10 +3,11 @@
 namespace Michcald\Fsm\Exception;
 
 use Michcald\Fsm\Accessor\AccessorInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 
 class InvalidObjectForAccessorException extends \Exception
 {
-    public function __construct(AccessorInterface $accessor, FsmInterface $object, $code = 0, $previous = null)
+    public function __construct(AccessorInterface $accessor, StatefulInterface $object, $code = 0, $previous = null)
     {
         $message = sprintf(
             'Accessor of class <%s> expects an object of class <%s>. <%s> provided.',

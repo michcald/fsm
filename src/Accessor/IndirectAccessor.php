@@ -2,16 +2,16 @@
 
 namespace Michcald\Fsm\Accessor;
 
-use Michcald\Fsm\Interfaces\FsmInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 
 class IndirectAccessor extends AccessorAbstract
 {
-    protected function getCurrentStateName(FsmInterface $object)
+    protected function getCurrentStateName(StatefulInterface $object)
     {
         return $object->getFsmState($this->fsm->getName());
     }
 
-    protected function setCurrentStateName(FsmInterface $object, $stateName)
+    protected function setCurrentStateName(StatefulInterface $object, $stateName)
     {
         $object->setFsmState($this->fsm->getName(), $stateName);
 
@@ -20,6 +20,6 @@ class IndirectAccessor extends AccessorAbstract
 
     public function getExpectedObjectInterface()
     {
-        return 'Michcald\Fsm\Interfaces\FsmIndirectInterface';
+        return 'Michcald\Fsm\Stateful\StatefulIndirectInterface';
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Michcald\Fsm\Interfaces\FsmDirectInterface;
+use Michcald\Fsm\Stateful\StatefulDirectInterface;
 
-class DocumentA implements FsmDirectInterface
+class DocumentA implements StatefulDirectInterface
 {
     private $myState;
 

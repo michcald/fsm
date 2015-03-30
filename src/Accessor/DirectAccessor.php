@@ -2,7 +2,7 @@
 
 namespace Michcald\Fsm\Accessor;
 
-use Michcald\Fsm\Interfaces\FsmInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Validator\ValidatorInterface;
 
@@ -20,7 +20,7 @@ class DirectAccessor extends AccessorAbstract
         $this->propertyGetter = $propertyGetter;
     }
 
-    protected function getCurrentStateName(FsmInterface $object)
+    protected function getCurrentStateName(StatefulInterface $object)
     {
         $propertyGetter = $this->propertyGetter;
 
@@ -33,7 +33,7 @@ class DirectAccessor extends AccessorAbstract
         return $object->$propertyGetter();
     }
 
-    protected function setCurrentStateName(FsmInterface $object, $stateName)
+    protected function setCurrentStateName(StatefulInterface $object, $stateName)
     {
         $propertySetter = $this->propertySetter;
 
@@ -50,6 +50,6 @@ class DirectAccessor extends AccessorAbstract
 
     public function getExpectedObjectInterface()
     {
-        return 'Michcald\Fsm\Interfaces\FsmDirectInterface';
+        return 'Michcald\Fsm\Stateful\StatefulDirectInterface';
     }
 }
