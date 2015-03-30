@@ -43,6 +43,11 @@ abstract class AccessorAbstract implements AccessorInterface
             throw new Exception\InvalidObjectForAccessorException($this, $object);
         }
 
+        $this
+            ->validator
+            ->validate($this->fsm)
+        ;
+
         $currentStateName = $this->getCurrentStateName($object);
 
         // verify the transition
