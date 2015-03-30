@@ -12,6 +12,8 @@ interface AccessorInterface
 
     public function setObjectClass($objectClass);
 
+    public function setObjectProperty($objectProperty);
+
     public function setValidator(ValidatorInterface $validator);
 
     public function setInitialState(StatefulInterface $object);
@@ -21,8 +23,4 @@ interface AccessorInterface
     public function isInitialState(StatefulInterface $object);
 
     public function isFinalState(StatefulInterface $object);
-
-    public function getCurrentStateName(StatefulInterface $object);
-
-    public function setCurrentStateName(StatefulInterface $object, $stateName);
 }

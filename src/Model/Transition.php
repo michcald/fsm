@@ -10,6 +10,13 @@ class Transition implements Interfaces\TransitionInterface
 
     private $toStateName;
 
+    public function __construct($name, $fromStateName, $toStateName)
+    {
+        $this->name = $name;
+        $this->fromStateName = $fromStateName;
+        $this->toStateName = $toStateName;
+    }
+
     public function setName($name)
     {
         $this->name = $name;

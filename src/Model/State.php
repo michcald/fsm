@@ -8,9 +8,10 @@ class State implements Interfaces\StateInterface
 
     private $type;
 
-    public function __construct()
+    public function __construct($name, $type)
     {
-        $this->type = Interfaces\StateInterface::TYPE_NORMAL;
+        $this->name = $name;
+        $this->type = $type;
     }
 
     public function setName($name)

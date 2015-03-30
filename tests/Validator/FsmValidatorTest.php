@@ -10,57 +10,17 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
 {
     private function getNewInvalidFsm()
     {
-        $fsm = new Fsm();
-        $fsm->setName('fsm1');
+        $fsm = new Fsm('fsm1');
 
-        $s1 = new State();
-        $s1
-            ->setName('s1')
-            ->setType(StateInterface::TYPE_INITIAL)
-        ;
+        $s1 = new State('s1', StateInterface::TYPE_INITIAL);
+        $s2 = new State('s2', StateInterface::TYPE_NORMAL);
+        $s3 = new State('s3', StateInterface::TYPE_NORMAL);
+        $s4 = new State('s4', StateInterface::TYPE_FINAL);
 
-        $s2 = new State();
-        $s2
-            ->setName('s2')
-            ->setType(StateInterface::TYPE_NORMAL)
-        ;
-
-        $s3 = new State();
-        $s3->setName('s3');
-
-        $s4 = new State();
-        $s4
-            ->setName('s4')
-            ->setType(StateInterface::TYPE_FINAL)
-        ;
-
-        $t1 = new Transition();
-        $t1
-            ->setName('t1')
-            ->setFromStateName('s1')
-            ->setToStateName('s2')
-        ;
-
-        $t2 = new Transition();
-        $t2
-            ->setName('t2')
-            ->setFromStateName('s1')
-            ->setToStateName('s3')
-        ;
-
-        $t3 = new Transition();
-        $t3
-            ->setName('t3')
-            ->setFromStateName('s3')
-            ->setToStateName('s1')
-        ;
-
-        $t4 = new Transition();
-        $t4
-            ->setName('t4')
-            ->setFromStateName('s2')
-            ->setToStateName('s4')
-        ;
+        $t1 = new Transition('t1', 's1', 's2');
+        $t2 = new Transition('t2', 's1', 's3');
+        $t3 = new Transition('t3', 's3', 's1');
+        $t4 = new Transition('t4', 's2', 's4');
 
         $fsm->addState($s1);
         $fsm->addState($s2);
@@ -72,13 +32,7 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
         $fsm->addTransition($t3);
         $fsm->addTransition($t4);
 
-        $ty = new Transition();
-        $ty
-            ->setName('t123')
-            ->setFromStateName('s123')
-            ->setToStateName('s456')
-        ;
-
+        $ty = new Transition('t123', 's123', 's456');
         $fsm->addTransition($ty);
 
         return $fsm;

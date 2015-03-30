@@ -28,8 +28,9 @@ class Fsm implements Interfaces\FsmInterface
      */
     private $transitions;
 
-    public function __construct()
+    public function __construct($name)
     {
+        $this->name = $name;
         $this->states = array();
         $this->transitions = array();
     }
