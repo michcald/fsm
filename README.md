@@ -4,7 +4,7 @@ A Finite State Machine library (FSM) implementation for PHP.
 
 Supports multiple FSMs for the same entity.
 
-*WARNING:* this package is still under development. Think twice before to use it.
+**WARNING:** this package is still under development. Think twice before to use it.
 
 # Getting started
 
