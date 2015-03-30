@@ -1,7 +1,7 @@
 {
     "name": "michcald/fsm",
     "description": "Finite State Machine Library for PHP",
-    "license": "GNU GENERAL PUBLIC LICENSE",
+    "license": "MIT",
     "keywords": ["michcald", "fsm", "finite", "state", "machine"],
     "authors": [
         {
