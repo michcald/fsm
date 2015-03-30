@@ -31,7 +31,7 @@ abstract class AccessorAbstract implements AccessorInterface
         ;
     }
 
-    final public function doTransaction(FsmInterface $object, $transactionName)
+    final public function doTransition(FsmInterface $object, $transitionName)
     {
         // verifying the object class
         if (!is_a($object, $this->objectClass)) {
@@ -45,24 +45,24 @@ abstract class AccessorAbstract implements AccessorInterface
 
         $currentStateName = $this->getCurrentStateName($object);
 
-        // verify the transaction
+        // verify the transition
 
-        $transaction = $this
+        $transition = $this
             ->fsm
-            ->getTransactionByName($transactionName)
+            ->getTransitionByName($transitionName)
         ;
 
-        if (!$transaction) {
-            throw new Exception\TransactionNotFoundException($this->fsm, $transactionName);
+        if (!$transition) {
+            throw new Exception\TransitionNotFoundException($this->fsm, $transitionName);
         }
 
-        if ($transaction->getFromStateName() != $currentStateName) {
-            throw new Exception\InvalidTransactionException($this->fsm, $transaction, $currentStateName);
+        if ($transition->getFromStateName() != $currentStateName) {
+            throw new Exception\InvalidTransitionException($this->fsm, $transition, $currentStateName);
         }
 
-        // execute transaction
+        // execute transition
 
-        $this->setCurrentStateName($object, $transaction->getToStateName());
+        $this->setCurrentStateName($object, $transition->getToStateName());
     }
 
     public function isInStartState(FsmInterface $object)

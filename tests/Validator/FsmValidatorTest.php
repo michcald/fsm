@@ -2,7 +2,7 @@
 
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransaction;
+use Michcald\Fsm\Model\FsmTransition;
 use Michcald\Fsm\Validator\FsmValidator;
 
 class FsmValidatorTest extends \PHPUnit_Framework_TestCase
@@ -16,23 +16,23 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
         $s3 = new FsmState('s3');
         $s4 = new FsmState('s4', FsmState::TYPE_END);
 
-        $t1 = new FsmTransaction('t1', 's1', 's2');
-        $t2 = new FsmTransaction('t2', 's1', 's3');
-        $t3 = new FsmTransaction('t3', 's3', 's1');
-        $t4 = new FsmTransaction('t4', 's2', 's4');
+        $t1 = new FsmTransition('t1', 's1', 's2');
+        $t2 = new FsmTransition('t2', 's1', 's3');
+        $t3 = new FsmTransition('t3', 's3', 's1');
+        $t4 = new FsmTransition('t4', 's2', 's4');
 
         $fsm->addState($s1);
         $fsm->addState($s2);
         $fsm->addState($s3);
         $fsm->addState($s4);
 
-        $fsm->addTransaction($t1);
-        $fsm->addTransaction($t2);
-        $fsm->addTransaction($t3);
-        $fsm->addTransaction($t4);
+        $fsm->addTransition($t1);
+        $fsm->addTransition($t2);
+        $fsm->addTransition($t3);
+        $fsm->addTransition($t4);
 
-        $fsm->addTransaction(
-            new FsmTransaction('s123', 's123', 's456')
+        $fsm->addTransition(
+            new FsmTransition('s123', 's123', 's456')
         );
 
         return $fsm;

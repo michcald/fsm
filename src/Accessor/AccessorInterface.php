@@ -6,7 +6,7 @@ use Michcald\Fsm\Interfaces\FsmInterface;
 
 interface AccessorInterface
 {
-    public function doTransaction(FsmInterface $object, $transactionName);
+    public function doTransition(FsmInterface $object, $transitionName);
 
     public function isInStartState(FsmInterface $object);
 

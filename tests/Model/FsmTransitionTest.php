@@ -1,9 +1,9 @@
 <?php
 
 use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransaction;
+use Michcald\Fsm\Model\FsmTransition;
 
-class FsmTransactionTest extends \PHPUnit_Framework_TestCase
+class FsmTransitionTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {

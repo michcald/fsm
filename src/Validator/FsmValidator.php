@@ -17,7 +17,7 @@ class FsmValidator implements ValidatorInterface
      * @throws Exception\DuplicateStateException
      * @throws Exception\MissingStartStateException
      * @throws Exception\MultipleStartStatesException
-     * @throws Exception\DuplicateTransactionException
+     * @throws Exception\DuplicateTransitionException
      * @throws Exception\StateNotFoundException
      */
     public function validate(Fsm $fsm, $throwExceptions = true)
@@ -52,23 +52,23 @@ class FsmValidator implements ValidatorInterface
             }
 
             // every transation must have a unique name
-            $transactionsNames = array();
-            foreach ($fsm->getTransactions() as $transaction) {
-                $transactionsNames[] = $transaction->getName();
+            $transitionsNames = array();
+            foreach ($fsm->getTransitions() as $transition) {
+                $transitionsNames[] = $transition->getName();
             }
 
-            $duplicateTransactions = $this->getDuplicates($transactionsNames);
-            foreach ($duplicateTransactions as $duplicateTransaction) {
-                throw new Exception\DuplicateTransactionException($fsm, $duplicateTransaction);
+            $duplicateTransitions = $this->getDuplicates($transitionsNames);
+            foreach ($duplicateTransitions as $duplicateTransition) {
+                throw new Exception\DuplicateTransitionException($fsm, $duplicateTransition);
             }
 
-            // every transaction from/to state must exist
-            foreach ($fsm->getTransactions() as $transaction) {
-                if (!$fsm->hasStateByName($transaction->getFromStateName())) {
-                    throw new Exception\StateNotFoundException($fsm, $transaction->getFromStateName());
+            // every transition from/to state must exist
+            foreach ($fsm->getTransitions() as $transition) {
+                if (!$fsm->hasStateByName($transition->getFromStateName())) {
+                    throw new Exception\StateNotFoundException($fsm, $transition->getFromStateName());
                 }
-                if (!$fsm->hasStateByName($transaction->getToStateName())) {
-                    throw new Exception\StateNotFoundException($fsm, $transaction->getToStateName());
+                if (!$fsm->hasStateByName($transition->getToStateName())) {
+                    throw new Exception\StateNotFoundException($fsm, $transition->getToStateName());
                 }
             }
         } catch (\Exception $e) {

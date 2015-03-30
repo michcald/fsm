@@ -2,7 +2,7 @@
 
 namespace Michcald\Fsm\Model;
 
-class FsmTransaction
+class FsmTransition
 {
     private $name;
 

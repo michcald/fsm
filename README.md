@@ -24,12 +24,12 @@ The library works with these main components:
 
 ### The Model
 
-The model consists in the base classes for creating a FSM (states, transactions).
+The model consists in the base classes for creating a FSM (states, transitions).
 
 ```php
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransaction;
+use Michcald\Fsm\Model\FsmTransition;
 
 // defining all the states
 $s1 = new FsmState('s1', FsmState::TYPE_START);
@@ -37,11 +37,11 @@ $s2 = new FsmState('s2', FsmState::TYPE_NORMAL);
 $s3 = new FsmState('s3');
 $s4 = new FsmState('s4', FsmState::TYPE_END);
 
-// defining all the transactions
-$t1 = new FsmTransaction('t1', 's1', 's2');
-$t2 = new FsmTransaction('t2', 's1', 's3');
-$t3 = new FsmTransaction('t3', 's3', 's1');
-$t4 = new FsmTransaction('t4', 's2', 's4');
+// defining all the transitions
+$t1 = new FsmTransition('t1', 's1', 's2');
+$t2 = new FsmTransition('t2', 's1', 's3');
+$t3 = new FsmTransition('t3', 's3', 's1');
+$t4 = new FsmTransition('t4', 's2', 's4');
 
 // initializing the FSM
 $fsm = new Fsm('fsm1');
@@ -51,15 +51,15 @@ $fsm->addState($s2);
 $fsm->addState($s3);
 $fsm->addState($s4);
 
-$fsm->addTransaction($t1);
-$fsm->addTransaction($t2);
-$fsm->addTransaction($t3);
-$fsm->addTransaction($t4);
+$fsm->addTransition($t1);
+$fsm->addTransition($t2);
+$fsm->addTransition($t3);
+$fsm->addTransition($t4);
 ```
 
 ### The FSM Validator
 
-This component is in charge of validating the FSM after being populated with states and transactions.
+This component is in charge of validating the FSM after being populated with states and transitions.
 
 You can decide to validate using exceptions or not just passing an optional parameter to the `validate($object, $throwExceptions = true)` method.
 
@@ -80,8 +80,8 @@ if ($isValid) {
     printf('FSM <%s> is NOT valid%s', $fsm->getName(), PHP_EOL);
 }
 
-// adding an invalid transaction
-$fsm->addTransaction(new FsmTransaction('t1', 's1', 's2'));
+// adding an invalid transition
+$fsm->addTransition(new FsmTransition('t1', 's1', 's2'));
 
 // validating throwing exceptions
 try {
@@ -204,7 +204,7 @@ $accessor = new IndirectAccessor(
 );
 ```
 
-#### Accessing the FSM and executing transactions
+#### Accessing the FSM and executing transitions
 
 ```php
 
@@ -220,8 +220,8 @@ if ($accessor->isInStartState($doc)) {
   printf('The object is in the START state%s', PHP_EOL);
 }
 
-$accessor->doTransaction($doc, 't1');
-$accessor->doTransaction($doc, 't4');
+$accessor->doTransition($doc, 't1');
+$accessor->doTransition($doc, 't4');
 
 if ($accessor->isInEndState($doc)) {
   printf('The object has reached an END state%s', PHP_EOL);

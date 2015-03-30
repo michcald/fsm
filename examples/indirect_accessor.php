@@ -6,7 +6,7 @@ include __DIR__ . '/entity/DocumentB.php';
 
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransaction;
+use Michcald\Fsm\Model\FsmTransition;
 use Michcald\Fsm\Accessor\IndirectAccessor;
 use Michcald\Fsm\Validator\FsmValidator;
 
@@ -20,11 +20,11 @@ $fsm->setStates(array(
     new FsmState('s4', FsmState::TYPE_END),
 ));
 
-$fsm->setTransactions(array(
-    new FsmTransaction('t1', 's1', 's2'),
-    new FsmTransaction('t2', 's1', 's3'),
-    new FsmTransaction('t3', 's3', 's1'),
-    new FsmTransaction('t4', 's2', 's4'),
+$fsm->setTransitions(array(
+    new FsmTransition('t1', 's1', 's2'),
+    new FsmTransition('t2', 's1', 's3'),
+    new FsmTransition('t3', 's3', 's1'),
+    new FsmTransition('t4', 's2', 's4'),
 ));
 
 $doc = new DocumentB();
@@ -41,11 +41,11 @@ try {
         printf('The object is in the START state%s', PHP_EOL);
     }
 
-    $accessor->doTransaction($doc, 't1');
-    printTransaction($fsm->getTransactionByName('t1'));
+    $accessor->doTransition($doc, 't1');
+    printTransition($fsm->getTransitionByName('t1'));
 
-    $accessor->doTransaction($doc, 't4');
-    printTransaction($fsm->getTransactionByName('t2'));
+    $accessor->doTransition($doc, 't4');
+    printTransition($fsm->getTransitionByName('t2'));
 
     if ($accessor->isInEndState($doc)) {
         printf('The object has reached an END state%s', PHP_EOL);
@@ -55,13 +55,13 @@ try {
 }
 
 
-function printTransaction(FsmTransaction $transaction)
+function printTransition(FsmTransition $transition)
 {
     printf(
-        'Transaction <%s> from state <%s> to state <%s> completed%s',
-        $transaction->getName(),
-        $transaction->getFromStateName(),
-        $transaction->getToStateName(),
+        'Transition <%s> from state <%s> to state <%s> completed%s',
+        $transition->getName(),
+        $transition->getFromStateName(),
+        $transition->getToStateName(),
         PHP_EOL
     );
 }

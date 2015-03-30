@@ -14,22 +14,22 @@ class Fsm
     /**
      * states
      *
-     * @var array[FsmStates]
+     * @var array[FsmState]
      */
     private $states;
 
     /**
-     * transactions
+     * transitions
      *
-     * @var array[FsmTransactions]
+     * @var array[FsmTransition]
      */
-    private $transactions;
+    private $transitions;
 
     public function __construct($name)
     {
         $this->name = $name;
         $this->states = array();
-        $this->transactions = array();
+        $this->transitions = array();
     }
 
     public function getName()
@@ -97,43 +97,43 @@ class Fsm
         return $this->states;
     }
 
-    public function setTransactions(array $transactions)
+    public function setTransitions(array $transitions)
     {
-        foreach ($transactions as $transaction) {
-            $this->addTransaction($transaction);
+        foreach ($transitions as $transition) {
+            $this->addTransition($transition);
         }
         return $this;
     }
 
-    public function addTransaction(FsmTransaction $transaction)
+    public function addTransition(FsmTransition $transition)
     {
-        $this->transactions[] = $transaction;
+        $this->transitions[] = $transition;
 
         return $this;
     }
 
-    public function hasTransactionByName($transactionName)
+    public function hasTransitionByName($transitionName)
     {
-        foreach ($this->transactions as $transaction) {
-            if ($transaction->getName() == $transactionName) {
+        foreach ($this->transitions as $transition) {
+            if ($transition->getName() == $transitionName) {
                 return true;
             }
         }
         return false;
     }
 
-    public function getTransactionByName($transactionName)
+    public function getTransitionByName($transitionName)
     {
-        foreach ($this->transactions as $transaction) {
-            if ($transaction->getName() == $transactionName) {
-                return $transaction;
+        foreach ($this->transitions as $transition) {
+            if ($transition->getName() == $transitionName) {
+                return $transition;
             }
         }
         return null;
     }
 
-    public function getTransactions()
+    public function getTransitions()
     {
-        return $this->transactions;
+        return $this->transitions;
     }
 }
