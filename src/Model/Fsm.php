@@ -2,7 +2,10 @@
 
 namespace Michcald\Fsm\Model;
 
-class Fsm
+use Michcald\Fsm\Model\Interfaces\StateInterface;
+use Michcald\Fsm\Model\Interfaces\TransitionInterface;
+
+class Fsm implements Interfaces\FsmInterface
 {
     /**
      * name
@@ -25,11 +28,17 @@ class Fsm
      */
     private $transitions;
 
-    public function __construct($name)
+    public function __construct()
     {
-        $this->name = $name;
         $this->states = array();
         $this->transitions = array();
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getName()
@@ -63,7 +72,7 @@ class Fsm
     public function getInitialState()
     {
         foreach ($this->states as $state) {
-            if ($state->getType() == FsmState::TYPE_INITIAL) {
+            if ($state->getType() == StateInterface::TYPE_INITIAL) {
                 return $state;
             }
         }
@@ -73,14 +82,14 @@ class Fsm
     public function hasFinalState()
     {
         foreach ($this->states as $state) {
-            if ($state->getType() == FsmState::TYPE_FINAL) {
+            if ($state->getType() == StateInterface::TYPE_FINAL) {
                 return true;
             }
         }
         return false;
     }
 
-    public function addState(FsmState $state)
+    public function addState(StateInterface $state)
     {
         $this->states[] = $state;
 
@@ -110,7 +119,7 @@ class Fsm
         return $this;
     }
 
-    public function addTransition(FsmTransition $transition)
+    public function addTransition(TransitionInterface $transition)
     {
         $this->transitions[] = $transition;
 

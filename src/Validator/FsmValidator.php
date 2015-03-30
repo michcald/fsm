@@ -4,7 +4,8 @@ namespace Michcald\Fsm\Validator;
 
 use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Model\Fsm;
-use Michcald\Fsm\Model\FsmState;
+use Michcald\Fsm\Model\State;
+use Michcald\Fsm\Model\Interfaces\StateInterface;
 use Michcald\Fsm\Exception;
 
 class FsmValidator implements ValidatorInterface
@@ -38,7 +39,7 @@ class FsmValidator implements ValidatorInterface
             // must have a single initial state
             $countInitialStates = 0;
             foreach ($fsm->getStates() as $state) {
-                if ($state->getType() == FsmState::TYPE_INITIAL) {
+                if ($state->getType() == StateInterface::TYPE_INITIAL) {
                     $countInitialStates ++;
                 }
             }
