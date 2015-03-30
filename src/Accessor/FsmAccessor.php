@@ -7,6 +7,7 @@ use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Exception;
 use Michcald\Fsm\Model\Interfaces\StateInterface;
+use Michcald\Fsm\Model\Interfaces\FsmInterface;
 
 class FsmAccessor implements AccessorInterface
 {
@@ -17,6 +18,14 @@ class FsmAccessor implements AccessorInterface
     protected $objectProperty;
 
     protected $validator;
+
+    public function __construct(FsmInterface $fsm, ValidatorInterface $validator, $objectClass, $objectProperty)
+    {
+        $this->fsm = $fsm;
+        $this->validator = $validator;
+        $this->objectClass = $objectClass;
+        $this->objectProperty = $objectProperty;
+    }
 
     public function setFsm(Fsm $fsm)
     {
@@ -55,7 +64,7 @@ class FsmAccessor implements AccessorInterface
 
         $this->setCurrentStateName(
             $object,
-            $this->fsm->getInitialState()
+            $this->fsm->getInitialState()->getName()
         );
 
         return $this;
@@ -68,8 +77,7 @@ class FsmAccessor implements AccessorInterface
             throw new Exception\InvalidObjectClassException($this->fsm, $this->objectClass, $object);
         }
 
-        // verifying the interface for the accessor
-        if (!is_a($object, $this->getExpectedObjectInterface())) {
+        if (!$object instanceof StatefulInterface) {
             throw new Exception\InvalidObjectForAccessorException($this, $object);
         }
 
@@ -126,7 +134,7 @@ class FsmAccessor implements AccessorInterface
 
     protected function getCurrentStateName(StatefulInterface $object)
     {
-        $propertyGetter = 'get' . ucfirst($this->objectClass);
+        $propertyGetter = 'get' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertyGetter)) {
             throw new \Exception(
@@ -139,7 +147,7 @@ class FsmAccessor implements AccessorInterface
 
     protected function setCurrentStateName(StatefulInterface $object, $stateName)
     {
-        $propertySetter = 'set' . ucfirst($this->objectClass);
+        $propertySetter = 'set' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertySetter)) {
             throw new \Exception(

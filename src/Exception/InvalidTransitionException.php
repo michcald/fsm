@@ -7,14 +7,14 @@ use Michcald\Fsm\Model\Interfaces\TransitionInterface;
 
 class InvalidTransitionException extends \Exception
 {
-    public function __construct(Fsm $fsm, TransitionInterface $transition, $currentState, $code = 0, $previous = null)
+    public function __construct(Fsm $fsm, TransitionInterface $transition, $currentStateName, $code = 0, $previous = null)
     {
         $message = sprintf(
             'Invalid transition <%s> from state <%s> to state <%s> on current state <%s> for FSM <%s>',
             $transition->getName(),
             $transition->getFromStateName(),
             $transition->getToStateName(),
-            $currentState,
+            $currentStateName,
             $fsm->getName()
         );
 
