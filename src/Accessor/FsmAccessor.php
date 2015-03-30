@@ -6,29 +6,44 @@ use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
 use Michcald\Fsm\Exception;
-use Michcald\Fsm\Model\FsmState;
+use Michcald\Fsm\Model\Interfaces\StateInterface;
 
-abstract class AccessorAbstract implements AccessorInterface
+class FsmAccessor implements AccessorInterface
 {
     protected $fsm;
 
     protected $objectClass;
 
+    protected $objectProperty;
+
     protected $validator;
 
-    public function __construct(Fsm $fsm, $objectClass, ValidatorInterface $validator)
+    public function setFsm(Fsm $fsm)
     {
         $this->fsm = $fsm;
-        $this->objectClass = $objectClass;
-        $this->validator = $validator;
+
+        return $this;
     }
 
-    final public function validate($throwExceptions = true)
+    public function setObjectClass($objectClass)
     {
-        return $this
-            ->validator
-            ->validate($this->fsm, $throwExceptions)
-        ;
+        $this->objectClass = $objectClass;
+
+        return $this;
+    }
+
+    public function setObjectProperty($objectProperty)
+    {
+        $this->objectProperty = $objectProperty;
+
+        return $this;
+    }
+
+    public function setValidator(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+
+        return $this;
     }
 
     public function setInitialState(StatefulInterface $object)
@@ -94,7 +109,7 @@ abstract class AccessorAbstract implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == FsmState::TYPE_INITIAL;
+        return $currentState && $currentState->getType() == StateInterface::TYPE_INITIAL;
     }
 
     public function isFinalState(StatefulInterface $object)
@@ -106,10 +121,34 @@ abstract class AccessorAbstract implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == FsmState::TYPE_FINAL;
+        return $currentState && $currentState->getType() == StateInterface::TYPE_FINAL;
     }
 
-    abstract protected function getCurrentStateName(StatefulInterface $object);
+    protected function getCurrentStateName(StatefulInterface $object)
+    {
+        $propertyGetter = 'get' . ucfirst($this->objectClass);
 
-    abstract protected function setCurrentStateName(StatefulInterface $object, $stateName);
+        if (!method_exists($object, $propertyGetter)) {
+            throw new \Exception(
+                sprintf('Invalid FSM getter <%s> for class <%s>', $propertyGetter, $this->objectClass)
+            );
+        }
+
+        return $object->$propertyGetter();
+    }
+
+    protected function setCurrentStateName(StatefulInterface $object, $stateName)
+    {
+        $propertySetter = 'set' . ucfirst($this->objectClass);
+
+        if (!method_exists($object, $propertySetter)) {
+            throw new \Exception(
+                sprintf('Invalid FSM setter <%s> for class <%s>', $propertySetter, $this->objectClass)
+            );
+        }
+
+        $object->$propertySetter($stateName);
+
+        return $this;
+    }
 }

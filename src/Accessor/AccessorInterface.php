@@ -2,10 +2,18 @@
 
 namespace Michcald\Fsm\Accessor;
 
+use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Stateful\StatefulInterface;
+use Michcald\Fsm\Validator\ValidatorInterface;
 
 interface AccessorInterface
 {
+    public function setFsm(Fsm $fsm);
+
+    public function setObjectClass($objectClass);
+
+    public function setValidator(ValidatorInterface $validator);
+
     public function setInitialState(StatefulInterface $object);
 
     public function doTransition(StatefulInterface $object, $transitionName);
@@ -14,5 +22,7 @@ interface AccessorInterface
 
     public function isFinalState(StatefulInterface $object);
 
-    public function getExpectedObjectInterface();
+    public function getCurrentStateName(StatefulInterface $object);
+
+    public function setCurrentStateName(StatefulInterface $object, $stateName);
 }
