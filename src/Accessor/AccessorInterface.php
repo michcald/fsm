@@ -6,6 +6,8 @@ use Michcald\Fsm\Interfaces\FsmInterface;
 
 interface AccessorInterface
 {
+    public function setInitialState(FsmInterface $object);
+
     public function doTransition(FsmInterface $object, $transitionName);
 
     public function isInitialState(FsmInterface $object);

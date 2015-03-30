@@ -138,9 +138,6 @@ class DocumentA implements FsmDirectInterface
 After instanciating the class we do the same for the `DirectAccessor` injecting also the setter and getter methods.
 
 ```php
-$doc = new DocumentA();
-$doc->setMyState('s1'); // initializing the entry point
-
 $accessor = new DirectAccessor(
     $fsm,                         // the FSM
     '\Whatever\Entity\DocumentA', // the class name
@@ -148,6 +145,11 @@ $accessor = new DirectAccessor(
     'setMyState',                 // the setter method
     'getMyState'                  // the getter method
 );
+
+$doc = new DocumentA();
+
+// initializing the entry point (there can be a single initial state)
+$accessor->setInitialState($doc);
 ```
 
 ##### The IndirectAccessor
@@ -194,14 +196,16 @@ class DocumentB implements FsmIndirectInterface
 Using the `FsmIndirectInterface` does not require to inject any extra arguments in the accessor object.
 
 ```php
-$doc = new DocumentB();
-$doc->setFsmState('fsm1', 's1'); // initializing the entry point
-
 $accessor = new IndirectAccessor(
     $fsm,                         // the FSM
     '\Whatever\Entity\DocumentB', // the class name
     new FsmValidator()            // the FSM validator
 );
+
+$doc = new DocumentB();
+
+// initializing the entry point (there can be a single initial state)
+$accessor->setInitialState($doc);
 ```
 
 #### Accessing the FSM and executing transitions
@@ -210,11 +214,11 @@ $accessor = new IndirectAccessor(
 
 // ... defining the FSM
 
+// ... defining the accessor (direct or indirect)
+
 // ... defining the application entity (direct or indirect)
 $doc = new DocumentY();
-$doc->setMyState('s1'); // initial state
-
-// ... defining the accessor (direct or indirect)
+$accessor->setInitialState($doc);
 
 if ($accessor->isInitialState($doc)) {
   printf('The object is in the INITIAL state%s', PHP_EOL);

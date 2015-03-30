@@ -57,12 +57,17 @@ class Fsm
 
     public function hasInitialState()
     {
+        return $this->getInitialState() != null;
+    }
+
+    public function getInitialState()
+    {
         foreach ($this->states as $state) {
             if ($state->getType() == FsmState::TYPE_INITIAL) {
-                return true;
+                return $state;
             }
         }
-        return false;
+        return null;
     }
 
     public function hasFinalState()

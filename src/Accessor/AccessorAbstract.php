@@ -31,7 +31,22 @@ abstract class AccessorAbstract implements AccessorInterface
         ;
     }
 
-    final public function doTransition(FsmInterface $object, $transitionName)
+    public function setInitialState(FsmInterface $object)
+    {
+        $this
+            ->validator
+            ->validate($this->fsm)
+        ;
+
+        $this->setCurrentStateName(
+            $object,
+            $this->fsm->getInitialState()
+        );
+
+        return $this;
+    }
+
+    public function doTransition(FsmInterface $object, $transitionName)
     {
         // verifying the object class
         if (!is_a($object, $this->objectClass)) {
