@@ -15,8 +15,8 @@ class FsmValidator implements ValidatorInterface
      * @param Fsm $fsm
      * @return boolean
      * @throws Exception\DuplicateStateException
-     * @throws Exception\MissingStartStateException
-     * @throws Exception\MultipleStartStatesException
+     * @throws Exception\MissingInitialStateException
+     * @throws Exception\MultipleInitialStatesException
      * @throws Exception\DuplicateTransitionException
      * @throws Exception\StateNotFoundException
      */
@@ -35,20 +35,20 @@ class FsmValidator implements ValidatorInterface
                 throw new Exception\DuplicateStateException($fsm, $duplicateState);
             }
 
-            // must have a single starting state
-            $countStartStates = 0;
+            // must have a single initial state
+            $countInitialStates = 0;
             foreach ($fsm->getStates() as $state) {
-                if ($state->getType() == FsmState::TYPE_START) {
-                    $countStartStates ++;
+                if ($state->getType() == FsmState::TYPE_INITIAL) {
+                    $countInitialStates ++;
                 }
             }
 
-            if ($countStartStates == 0) {
-                throw new Exception\MissingStartStateException($fsm);
+            if ($countInitialStates == 0) {
+                throw new Exception\MissingInitialStateException($fsm);
             }
 
-            if ($countStartStates > 1) {
-                throw new Exception\MultipleStartStatesException($fsm);
+            if ($countInitialStates > 1) {
+                throw new Exception\MultipleInitialStatesException($fsm);
             }
 
             // every transation must have a unique name

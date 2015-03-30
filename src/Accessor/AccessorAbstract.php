@@ -65,7 +65,7 @@ abstract class AccessorAbstract implements AccessorInterface
         $this->setCurrentStateName($object, $transition->getToStateName());
     }
 
-    public function isInStartState(FsmInterface $object)
+    public function isInitialState(FsmInterface $object)
     {
         $currentStateName = $this->getCurrentStateName($object);
 
@@ -74,10 +74,10 @@ abstract class AccessorAbstract implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == FsmState::TYPE_START;
+        return $currentState && $currentState->getType() == FsmState::TYPE_INITIAL;
     }
 
-    public function isInEndState(FsmInterface $object)
+    public function isFinalState(FsmInterface $object)
     {
         $currentStateName = $this->getCurrentStateName($object);
 
@@ -86,7 +86,7 @@ abstract class AccessorAbstract implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == FsmState::TYPE_END;
+        return $currentState && $currentState->getType() == FsmState::TYPE_FINAL;
     }
 
     abstract protected function getCurrentStateName(FsmInterface $object);

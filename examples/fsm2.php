@@ -7,10 +7,10 @@ use Michcald\Fsm\Model\FsmState;
 use Michcald\Fsm\Model\FsmTransition;
 
 $states = array(
-    new FsmState('s1', FsmState::TYPE_START),
+    new FsmState('s1', FsmState::TYPE_INITIAL),
     new FsmState('s2', FsmState::TYPE_NORMAL),
     new FsmState('s3'),
-    new FsmState('s4', FsmState::TYPE_END),
+    new FsmState('s4', FsmState::TYPE_FINAL),
 );
 
 $transitions = array(

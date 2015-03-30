@@ -6,9 +6,9 @@ class FsmState
 {
     const TYPE_NORMAL = 'normal';
 
-    const TYPE_START = 'start';
+    const TYPE_INITIAL = 'initial';
 
-    const TYPE_END = 'end';
+    const TYPE_FINAL = 'final';
 
     private $name;
 

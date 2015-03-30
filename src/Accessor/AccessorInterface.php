@@ -8,9 +8,9 @@ interface AccessorInterface
 {
     public function doTransition(FsmInterface $object, $transitionName);
 
-    public function isInStartState(FsmInterface $object);
+    public function isInitialState(FsmInterface $object);
 
-    public function isInEndState(FsmInterface $object);
+    public function isFinalState(FsmInterface $object);
 
     public function getExpectedObjectInterface();
 }

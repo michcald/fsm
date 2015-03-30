@@ -8,10 +8,10 @@ use Michcald\Fsm\Model\FsmTransition;
 use Michcald\Fsm\Validator\FsmValidator;
 
 // defining all the states
-$s1 = new FsmState('s1', FsmState::TYPE_START);
+$s1 = new FsmState('s1', FsmState::TYPE_INITIAL);
 $s2 = new FsmState('s2', FsmState::TYPE_NORMAL);
 $s3 = new FsmState('s3');
-$s4 = new FsmState('s4', FsmState::TYPE_END);
+$s4 = new FsmState('s4', FsmState::TYPE_FINAL);
 
 // defining all the transitions
 $t1 = new FsmTransition('t1', 's1', 's2');

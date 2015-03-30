@@ -6,9 +6,9 @@ class FsmStateTest extends \PHPUnit_Framework_TestCase
 {
     public function testTypes()
     {
-        $this->assertNotEquals(FsmState::TYPE_START, FsmState::TYPE_NORMAL);
-        $this->assertNotEquals(FsmState::TYPE_START, FsmState::TYPE_END);
-        $this->assertNotEquals(FsmState::TYPE_END, FsmState::TYPE_NORMAL);
+        $this->assertNotEquals(FsmState::TYPE_INITIAL, FsmState::TYPE_NORMAL);
+        $this->assertNotEquals(FsmState::TYPE_INITIAL, FsmState::TYPE_FINAL);
+        $this->assertNotEquals(FsmState::TYPE_FINAL, FsmState::TYPE_NORMAL);
     }
 
     public function testCreate()
@@ -23,15 +23,15 @@ class FsmStateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($normalState2Name, $normalState2->getName());
         $this->assertEquals(FsmState::TYPE_NORMAL, $normalState2->getType());
 
-        $startStateName = 'stateStart';
-        $startState = new FsmState($startStateName, FsmState::TYPE_START);
-        $this->assertEquals($startStateName, $startState->getName());
-        $this->assertEquals(FsmState::TYPE_START, $startState->getType());
+        $initialStateName = 'stateInitial';
+        $initialState = new FsmState($initialStateName, FsmState::TYPE_INITIAL);
+        $this->assertEquals($initialStateName, $initialState->getName());
+        $this->assertEquals(FsmState::TYPE_INITIAL, $initialState->getType());
 
-        $endStateName = 'stateEnd';
-        $endState = new FsmState($endStateName, FsmState::TYPE_END);
-        $this->assertEquals($endStateName, $endState->getName());
-        $this->assertEquals(FsmState::TYPE_END, $endState->getType());
+        $finalStateName = 'stateFinal';
+        $finalState = new FsmState($finalStateName, FsmState::TYPE_FINAL);
+        $this->assertEquals($finalStateName, $finalState->getName());
+        $this->assertEquals(FsmState::TYPE_FINAL, $finalState->getType());
     }
 
     public function testBad()

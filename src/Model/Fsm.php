@@ -55,20 +55,20 @@ class Fsm
         return false;
     }
 
-    public function hasStartState()
+    public function hasInitialState()
     {
         foreach ($this->states as $state) {
-            if ($state->getType() == FsmState::TYPE_START) {
+            if ($state->getType() == FsmState::TYPE_INITIAL) {
                 return true;
             }
         }
         return false;
     }
 
-    public function hasEndState()
+    public function hasFinalState()
     {
         foreach ($this->states as $state) {
-            if ($state->getType() == FsmState::TYPE_END) {
+            if ($state->getType() == FsmState::TYPE_FINAL) {
                 return true;
             }
         }

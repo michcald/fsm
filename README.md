@@ -32,10 +32,10 @@ use Michcald\Fsm\Model\FsmState;
 use Michcald\Fsm\Model\FsmTransition;
 
 // defining all the states
-$s1 = new FsmState('s1', FsmState::TYPE_START);
+$s1 = new FsmState('s1', FsmState::TYPE_INITIAL);
 $s2 = new FsmState('s2', FsmState::TYPE_NORMAL);
 $s3 = new FsmState('s3');
-$s4 = new FsmState('s4', FsmState::TYPE_END);
+$s4 = new FsmState('s4', FsmState::TYPE_FINAL);
 
 // defining all the transitions
 $t1 = new FsmTransition('t1', 's1', 's2');
@@ -216,15 +216,15 @@ $doc->setMyState('s1'); // initial state
 
 // ... defining the accessor (direct or indirect)
 
-if ($accessor->isInStartState($doc)) {
-  printf('The object is in the START state%s', PHP_EOL);
+if ($accessor->isInitialState($doc)) {
+  printf('The object is in the INITIAL state%s', PHP_EOL);
 }
 
 $accessor->doTransition($doc, 't1');
 $accessor->doTransition($doc, 't4');
 
-if ($accessor->isInEndState($doc)) {
-  printf('The object has reached an END state%s', PHP_EOL);
+if ($accessor->isFinalState($doc)) {
+  printf('The object has reached a FINAL state%s', PHP_EOL);
 }
 ```
 

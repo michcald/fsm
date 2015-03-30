@@ -14,10 +14,10 @@ use Michcald\Fsm\Validator\FsmValidator;
 $fsm = new Fsm('fsm1');
 
 $fsm->setStates(array(
-    new FsmState('s1', FsmState::TYPE_START),
+    new FsmState('s1', FsmState::TYPE_INITIAL),
     new FsmState('s2', FsmState::TYPE_NORMAL),
     new FsmState('s3'),
-    new FsmState('s4', FsmState::TYPE_END),
+    new FsmState('s4', FsmState::TYPE_FINAL),
 ));
 
 $fsm->setTransitionTransitions(array(
@@ -39,8 +39,8 @@ $accessor = new DirectAccessor(
 );
 
 try {
-    if ($accessor->isInStartState($doc)) {
-        printf('The object is in the START state%s', PHP_EOL);
+    if ($accessor->isInitialState($doc)) {
+        printf('The object is in the INITIAL state%s', PHP_EOL);
     }
 
     $accessor->doTransition($doc, 't1');
@@ -49,8 +49,8 @@ try {
     $accessor->doTransition($doc, 't4');
     printTransition($fsm->getTransitionByName('t2'));
 
-    if ($accessor->isInEndState($doc)) {
-        printf('The object has reached an END state%s', PHP_EOL);
+    if ($accessor->isFinalState($doc)) {
+        printf('The object has reached an FINAL state%s', PHP_EOL);
     }
 } catch (\Exception $e) {
     throw $e;
