@@ -4,11 +4,9 @@ A Finite State Machine library (FSM) implementation for PHP.
 
 Supports multiple FSMs for the same entity.
 
-**WARNING:** this package is still under development. Think twice before to use it.
+**WARNING:** this package is close to a stable release. Stay tuned!
 
-# Getting started
-
-## Installation (using composer)
+# Installation (using composer)
 You can find the library in packagist [here](https://packagist.org/packages/michcald/fsm).
 ```
 {
@@ -18,30 +16,31 @@ You can find the library in packagist [here](https://packagist.org/packages/mich
 }
 ```
 
-## Components
+# Components
 
 The library works with these main components:
 
-### The Model
+## The Model
 
 The model consists in the base classes for creating a FSM (states, transitions).
 
 ```php
 use Michcald\Fsm\Model\Fsm;
-use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransition;
+use Michcald\Fsm\Model\State;
+use Michcald\Fsm\Model\Transition;
+use Michcald\Fsm\Model\Interfaces\StateInterface;
 
 // defining all the states
-$s1 = new FsmState('s1', FsmState::TYPE_INITIAL);
-$s2 = new FsmState('s2', FsmState::TYPE_NORMAL);
-$s3 = new FsmState('s3');
-$s4 = new FsmState('s4', FsmState::TYPE_FINAL);
+$s1 = new State('s1', StateInterface::TYPE_INITIAL);
+$s2 = new State('s2', StateInterface::TYPE_NORMAL);
+$s3 = new State('s3');
+$s4 = new State('s4', StateInterface::TYPE_FINAL);
 
 // defining all the transitions
-$t1 = new FsmTransition('t1', 's1', 's2');
-$t2 = new FsmTransition('t2', 's1', 's3');
-$t3 = new FsmTransition('t3', 's3', 's1');
-$t4 = new FsmTransition('t4', 's2', 's4');
+$t1 = new Transition('t1', 's1', 's2');
+$t2 = new Transition('t2', 's1', 's3');
+$t3 = new Transition('t3', 's3', 's1');
+$t4 = new Transition('t4', 's2', 's4');
 
 // initializing the FSM
 $fsm = new Fsm('fsm1');
@@ -57,7 +56,7 @@ $fsm->addTransition($t3);
 $fsm->addTransition($t4);
 ```
 
-### The FSM Validator
+## The FSM Validator
 
 This component is in charge of validating the FSM after being populated with states and transitions.
 
@@ -92,38 +91,37 @@ try {
 }
 ```
 
-### The Application Entity and the FSM Accessor
+## The Stateful model
 
-The Application Entity is the model class in your application that will be binded to one or more FSM(s).
+This is the class in your application that will hold the state related to a FSM.
 
-You will never use the FSM model straight away, but you will use an accessor class instead.
+## The Accessor
 
-There are two ways to hook a FSM in your Application Entity:
-* using a `DirectAccessor`, or
-* using an `IndirectAccessor`
+The model components above do not implement any workflow logic. They just define the structure of the FSM.
 
-#### The two accessor ways
+In order to execute transitions you need to use the Accessor class. 
 
-There is not a best way here, just choose what you prefer.
+Every FSM requires at least one Accessor.
 
-##### The DirectAccessor
+The Accessor is in charge of changing of:
+* using the validator to validate the FSM schema before every operation
+* initializing the state of your object
+* change the state of your object executing a transition
 
-This method allows you to define which setter/getter your Application Entity is using in order to map the property that contains the current state.
-
-First we define our Application Entity implementing the `StatefulDirectInterface` interface.
+First we define the class implementing the `StatefulInterface` interface.
 
 ```php
 namespace Whatever\Entity;
 
-use Michcald\Fsm\Stateful\StatefulDirectInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 
-class DocumentA implements StatefulDirectInterface
+class Document implements StatefulInterface
 {
     private $myState;
 
-    public function setMyState($state)
+    public function setMyState($myState)
     {
-        $this->myState = $state;
+        $this->myState = $myState;
 
         return $this;
     }
@@ -135,89 +133,21 @@ class DocumentA implements StatefulDirectInterface
 }
 ```
 
-After instanciating the class we do the same for the `DirectAccessor` injecting also the setter and getter methods.
+We then create the accessor object and use the FSM.
 
 ```php
+$fsm = ...;
+
 $accessor = new DirectAccessor(
     $fsm,                         // the FSM
-    '\Whatever\Entity\DocumentA', // the class name
     new FsmValidator(),           // the FSM validator
-    'setMyState',                 // the setter method
-    'getMyState'                  // the getter method
+    '\Whatever\Entity\Document',  // the class name
+    'myState'                     // the class property (this implies that the class has defined the methods setMyState() and getMyState())
 );
 
-$doc = new DocumentA();
+$doc = new Document();
 
-// initializing the entry point (there can be a single initial state)
-$accessor->setInitialState($doc);
-```
-
-##### The IndirectAccessor
-
-This method provides a standard interface in order to access it your Application Entity to the property that contains the current state.
-
-Here, instead, we implement the `StatefulIndirectInterface` and we are required to implement the `getFsmState()` and `setFsmState()` methods. These methods work as routers to the real class property.
-
-```php
-namespace Whatever\Entity;
-
-use Michcald\Fsm\Stateful\StatefulIndirectInterface;
-
-class DocumentB implements StatefulIndirectInterface
-{
-    private $myState1;
-
-    private $myState2;
-
-    public function getFsmState($fsmName)
-    {
-        switch ($fsmName) {
-            case 'fsm1':
-                return $this->myState1;
-            case 'fsm2':
-                return $this->myState2;
-        }
-    }
-
-    public function setFsmState($fsmName, $stateName)
-    {
-        switch ($fsmName) {
-            case 'fsm1':
-                $this->myState1 = $stateName;
-                break;
-            case 'fsm2':
-                $this->myState2 = $stateName;
-                break;
-        }
-    }
-}
-```
-
-Using the `StatefulIndirectInterface` does not require to inject any extra arguments in the accessor object.
-
-```php
-$accessor = new IndirectAccessor(
-    $fsm,                         // the FSM
-    '\Whatever\Entity\DocumentB', // the class name
-    new FsmValidator()            // the FSM validator
-);
-
-$doc = new DocumentB();
-
-// initializing the entry point (there can be a single initial state)
-$accessor->setInitialState($doc);
-```
-
-#### Accessing the FSM and executing transitions
-
-```php
-
-// ... defining the FSM
-
-// ... defining the accessor (direct or indirect)
-
-// ... defining the application entity (direct or indirect)
-$doc = new DocumentY();
+// initializing the entry point (every FSM must have one initial state)
 $accessor->setInitialState($doc);
 
 if ($accessor->isInitialState($doc)) {
@@ -232,12 +162,16 @@ if ($accessor->isFinalState($doc)) {
 }
 ```
 
-
 ## Customization
 
-You can easily define your customized Accessor extending the class `Michcald\Fsm\Accessor\AccessorAbstract`.
+You can easily customize every single components:
 
-Same thing for the validator implementing `Michcald\Fsm\Validator\ValidatorInterface`.
+* the models
+  * the FSM class - implementing `Michcald\Fsm\Model\Interfaces\FsmInterface`
+  * the State class - implementing `Michcald\Fsm\Model\Interfaces\StateInterface`
+  * the Transition class - implementing `Michcald\Fsm\Model\Interfaces\TransitionInterface`
+* the accessor - implementing `Michcald\Fsm\Accessor\AccessorInterface`
+* the validator - implementing `Michcald\Fsm\Validator\ValidatorInterface`
 
 ## Examples
 
