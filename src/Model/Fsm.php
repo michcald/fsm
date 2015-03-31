@@ -2,17 +2,19 @@
 
 namespace Michcald\Fsm\Model;
 
+use Michcald\Fsm\Model\Interfaces\FsmInterface;
+use Michcald\Fsm\Model\Interfaces\Common\NameableInterface;
+use Michcald\Fsm\Model\Interfaces\Common\PropertiableInterface;
+use Michcald\Fsm\Model\Traits\Common\NameableTrait;
+use Michcald\Fsm\Model\Traits\Common\PropertiableTrait;
 use Michcald\Fsm\Model\Interfaces\StateInterface;
 use Michcald\Fsm\Model\Interfaces\TransitionInterface;
 
-class Fsm implements Interfaces\FsmInterface
+class Fsm implements FsmInterface, NameableInterface, PropertiableInterface
 {
-    /**
-     * name
-     *
-     * @var string
-     */
-    private $name;
+    use NameableTrait;
+
+    use PropertiableTrait;
 
     /**
      * states
@@ -33,18 +35,6 @@ class Fsm implements Interfaces\FsmInterface
         $this->name = $name;
         $this->states = array();
         $this->transitions = array();
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function setStates(array $states)

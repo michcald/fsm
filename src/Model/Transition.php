@@ -2,9 +2,17 @@
 
 namespace Michcald\Fsm\Model;
 
-class Transition implements Interfaces\TransitionInterface
+use Michcald\Fsm\Model\Interfaces\TransitionInterface;
+use Michcald\Fsm\Model\Interfaces\Common\NameableInterface;
+use Michcald\Fsm\Model\Interfaces\Common\PropertiableInterface;
+use Michcald\Fsm\Model\Traits\Common\NameableTrait;
+use Michcald\Fsm\Model\Traits\Common\PropertiableTrait;
+
+class Transition implements TransitionInterface, NameableInterface, PropertiableInterface
 {
-    private $name;
+    use NameableTrait;
+
+    use PropertiableTrait;
 
     private $fromStateName;
 
@@ -15,18 +23,6 @@ class Transition implements Interfaces\TransitionInterface
         $this->name = $name;
         $this->fromStateName = $fromStateName;
         $this->toStateName = $toStateName;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function setFromStateName($fromStateName)

@@ -5,7 +5,7 @@ namespace Michcald\Fsm\Model\Interfaces;
 use Michcald\Fsm\Model\Interfaces\StateInterface;
 use Michcald\Fsm\Model\Interfaces\TransitionInterface;
 
-interface FsmInterface extends NameableInterface
+interface FsmInterface
 {
     public function setStates(array $states);
 

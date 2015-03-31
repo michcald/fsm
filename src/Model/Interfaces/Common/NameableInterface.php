@@ -1,6 +1,6 @@
 <?php
 
-namespace Michcald\Fsm\Model\Interfaces;
+namespace Michcald\Fsm\Model\Interfaces\Common;
 
 interface NameableInterface
 {

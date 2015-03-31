@@ -2,7 +2,7 @@
 
 namespace Michcald\Fsm\Model\Interfaces;
 
-interface StateInterface extends NameableInterface
+interface StateInterface
 {
     const TYPE_NORMAL = 'normal';
 

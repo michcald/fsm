@@ -2,7 +2,7 @@
 
 namespace Michcald\Fsm\Model\Interfaces;
 
-interface TransitionInterface extends NameableInterface
+interface TransitionInterface
 {
     public function setFromStateName($fromStateName);
 
