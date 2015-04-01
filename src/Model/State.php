@@ -14,23 +14,38 @@ class State implements StateInterface, NameableInterface, PropertiableInterface
 
     use PropertiableTrait;
 
-    private $type;
+    private $isInitial;
 
-    public function __construct($name, $type)
+    private $isFinal;
+
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->type = $type;
+        $this->isInitial = false;
+        $this->isFinal = false;
     }
 
-    public function setType($type)
+    public function setIsInitial($isInitial)
     {
-        $this->type = $type;
+        $this->isInitial = (bool)$isInitial;
 
         return $this;
     }
 
-    public function getType()
+    public function getIsInitial()
     {
-        return $this->type;
+        return $this->isInitial;
+    }
+
+    public function setIsFinal($isFinal)
+    {
+        $this->isFinal = (bool)$isFinal;
+
+        return $this;
+    }
+
+    public function getIsFinal()
+    {
+        return $this->isFinal;
     }
 }

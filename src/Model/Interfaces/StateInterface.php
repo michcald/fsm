@@ -4,13 +4,11 @@ namespace Michcald\Fsm\Model\Interfaces;
 
 interface StateInterface
 {
-    const TYPE_NORMAL = 'normal';
+    public function setIsInitial($isInitial);
 
-    const TYPE_INITIAL = 'initial';
+    public function getIsInitial();
 
-    const TYPE_FINAL = 'final';
+    public function setIsFinal($isFinal);
 
-    public function setType($type);
-
-    public function getType();
+    public function getIsFinal();
 }

@@ -9,14 +9,17 @@ class FsmTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $s1 = new State('s1', StateInterface::TYPE_INITIAL);
-        $s2 = new State('s2', StateInterface::TYPE_NORMAL);
-        $s3 = new State('s3', StateInterface::TYPE_NORMAL);
-        $s4 = new State('s4', StateInterface::TYPE_NORMAL);
-        $s5 = new State('s5', StateInterface::TYPE_NORMAL);
-        $s6 = new State('s6', StateInterface::TYPE_NORMAL);
-        $s7 = new State('s7', StateInterface::TYPE_FINAL);
-        $s8 = new State('s8', StateInterface::TYPE_FINAL);
+        $s1 = new State('s1');
+        $s1->setIsInitial(true);
+        $s2 = new State('s2');
+        $s3 = new State('s3');
+        $s4 = new State('s4');
+        $s5 = new State('s5');
+        $s6 = new State('s6');
+        $s7 = new State('s7');
+        $s7->setIsFinal(true);
+        $s8 = new State('s8');
+        $s8->setIsFinal(true);
 
         $t1 = new Transition('t1', 's1', 's2');
         $t2 = new Transition('t2', 's1', 's3');
@@ -50,23 +53,23 @@ class FsmTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(8, $fsm1->getStates());
         $this->assertCount(8, $fsm1->getTransitions());
 
-        $this->assertTrue($fsm1->hasInitialState());
-        $this->assertTrue($fsm1->hasFinalState());
+        $this->assertNotNull($fsm1->getInitialState());
+        $this->assertCount(2, $fsm1->getFinalStates());
 
-        $this->assertTrue($fsm1->hasStateByName('s4'));
-        $this->assertFalse($fsm1->hasStateByName('s44'));
-        $this->assertFalse($fsm1->hasStateByName(''));
+        $this->assertNotNull($fsm1->getStateByName('s4'));
+        $this->assertNull($fsm1->getStateByName('s44'));
+        $this->assertNull($fsm1->getStateByName(''));
 
-        $this->assertTrue($fsm1->hasTransitionByName('t7'));
-        $this->assertFalse($fsm1->hasTransitionByName('t31'));
-        $this->assertFalse($fsm1->hasTransitionByName(''));
+        $this->assertNotNull($fsm1->getTransitionByName('t7'));
+        $this->assertNull($fsm1->getTransitionByName('t31'));
+        $this->assertNull($fsm1->getTransitionByName(''));
 
         $this->assertEquals('s1', $fsm1->getInitialState()->getName());
     }
 
     public function testBadCreate()
     {
-        $s1 = new State('s1', StateInterface::TYPE_NORMAL);
+        $s1 = new State('s1');
 
         $t1 = new Transition('t1', 's1', 's2');
 
@@ -79,17 +82,15 @@ class FsmTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $fsm1->getStates());
         $this->assertCount(1, $fsm1->getTransitions());
 
-        $this->assertFalse($fsm1->hasInitialState());
-        $this->assertFalse($fsm1->hasFinalState());
-
-        $this->assertFalse($fsm1->hasStateByName('s4'));
-        $this->assertFalse($fsm1->hasStateByName(''));
-
-        $this->assertTrue($fsm1->hasTransitionByName('t1'));
-        $this->assertFalse($fsm1->hasTransitionByName('t31'));
-        $this->assertFalse($fsm1->hasTransitionByName(''));
-
         $this->assertNull($fsm1->getInitialState());
+        $this->assertCount(0, $fsm1->getFinalStates());
+
+        $this->assertNull($fsm1->getStateByName('s4'));
+        $this->assertNull($fsm1->getStateByName(''));
+
+        $this->assertNotNull($fsm1->getTransitionByName('t1'));
+        $this->assertNull($fsm1->getTransitionByName('t31'));
+        $this->assertNull($fsm1->getTransitionByName(''));
     }
 
     public function testProperty()

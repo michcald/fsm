@@ -5,43 +5,46 @@ use Michcald\Fsm\Model\Interfaces\StateInterface;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {
-    public function testTypes()
-    {
-        $this->assertNotEquals(StateInterface::TYPE_INITIAL, StateInterface::TYPE_NORMAL);
-        $this->assertNotEquals(StateInterface::TYPE_INITIAL, StateInterface::TYPE_FINAL);
-        $this->assertNotEquals(StateInterface::TYPE_FINAL, StateInterface::TYPE_NORMAL);
-    }
-
     public function testCreate()
     {
-        $normalState1Name = 'stateNormal';
-        $normalState1 = new State($normalState1Name, StateInterface::TYPE_NORMAL);
+        $s1Name = 'stateNormal';
+        $s1 = new State($s1Name);
 
-        $this->assertEquals($normalState1Name, $normalState1->getName());
-        $this->assertEquals(StateInterface::TYPE_NORMAL, $normalState1->getType());
+        $this->assertEquals($s1Name, $s1->getName());
+        $this->assertFalse($s1->getIsFinal());
+        $this->assertFalse($s1->getIsInitial());
 
-        $initialStateName = 'stateInitial';
-        $initialState = new State($initialStateName, StateInterface::TYPE_INITIAL);
+        $s2Name = 'stateInitial';
+        $s2 = new State($s2Name);
+        $s2->setIsInitial(true);
 
-        $this->assertEquals($initialStateName, $initialState->getName());
-        $this->assertEquals(StateInterface::TYPE_INITIAL, $initialState->getType());
+        $this->assertEquals($s2Name, $s2->getName());
+        $this->assertTrue($s2->getIsInitial());
+        $this->assertFalse($s2->getIsFinal());
 
-        $finalStateName = 'stateFinal';
-        $finalState = new State($finalStateName, StateInterface::TYPE_FINAL);
+        $s3Name = 'stateFinal';
+        $s3 = new State($s3Name);
+        $s3->setIsFinal(true);
 
-        $this->assertEquals($finalStateName, $finalState->getName());
-        $this->assertEquals(StateInterface::TYPE_FINAL, $finalState->getType());
+        $this->assertEquals($s3Name, $s3->getName());
+        $this->assertFalse($s3->getIsInitial());
+        $this->assertTrue($s3->getIsFinal());
 
-        $emptyName = '';
-        $emptyState = new State($emptyName, StateInterface::TYPE_NORMAL);
+        $s4Name = 'stateFinalInitial';
+        $s4 = new State($s4Name);
+        $s4
+            ->setIsInitial(true)
+            ->setIsFinal(true)
+        ;
 
-        $this->assertEquals($emptyName, $emptyState->getName());
-        $this->assertEquals(StateInterface::TYPE_NORMAL, $emptyState->getType());
+        $this->assertEquals($s4Name, $s4->getName());
+        $this->assertTrue($s4->getIsInitial());
+        $this->assertTrue($s4->getIsFinal());
     }
 
     public function testProperty()
     {
-        $s1 = new State('s1', StateInterface::TYPE_INITIAL);
+        $s1 = new State('s1');
         $s1
             ->addProperty('color', 'blue')
             ->addProperty('height', '')

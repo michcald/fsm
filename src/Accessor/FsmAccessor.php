@@ -64,7 +64,10 @@ class FsmAccessor implements AccessorInterface
 
         $this->setCurrentStateName(
             $object,
-            $this->fsm->getInitialState()->getName()
+            $this
+                ->fsm
+                ->getInitialState()
+                ->getName()
         );
 
         return $this;
@@ -117,7 +120,7 @@ class FsmAccessor implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == StateInterface::TYPE_INITIAL;
+        return $currentState && $currentState->getIsInitial();
     }
 
     public function isFinalState(StatefulInterface $object)
@@ -129,7 +132,7 @@ class FsmAccessor implements AccessorInterface
             ->getStateByName($currentStateName)
         ;
 
-        return $currentState && $currentState->getType() == StateInterface::TYPE_FINAL;
+        return $currentState && $currentState->getIsFinal();
     }
 
     protected function getCurrentStateName(StatefulInterface $object)

@@ -9,17 +9,7 @@ interface FsmInterface
 {
     public function setStates(array $states);
 
-    public function hasStateByName($stateName);
-
-    public function hasInitialState();
-
-    public function getInitialState();
-
-    public function hasFinalState();
-
     public function addState(StateInterface $state);
-
-    public function getStateByName($stateName);
 
     public function getStates();
 
@@ -27,9 +17,15 @@ interface FsmInterface
 
     public function addTransition(TransitionInterface $transition);
 
-    public function hasTransitionByName($transitionName);
+    public function getTransitions();
+
+    //
+
+    public function getInitialState();
+
+    public function getFinalStates();
+
+    public function getStateByName($stateName);
 
     public function getTransitionByName($transitionName);
-
-    public function getTransitions();
 }

@@ -45,56 +45,11 @@ class Fsm implements FsmInterface, NameableInterface, PropertiableInterface
         return $this;
     }
 
-    public function hasStateByName($stateName)
-    {
-        foreach ($this->states as $state) {
-            if ($state->getName() == $stateName) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function hasInitialState()
-    {
-        return $this->getInitialState() != null;
-    }
-
-    public function getInitialState()
-    {
-        foreach ($this->states as $state) {
-            if ($state->getType() == StateInterface::TYPE_INITIAL) {
-                return $state;
-            }
-        }
-        return null;
-    }
-
-    public function hasFinalState()
-    {
-        foreach ($this->states as $state) {
-            if ($state->getType() == StateInterface::TYPE_FINAL) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public function addState(StateInterface $state)
     {
         $this->states[] = $state;
 
         return $this;
-    }
-
-    public function getStateByName($stateName)
-    {
-        foreach ($this->states as $state) {
-            if ($state->getName() == $stateName) {
-                return $state;
-            }
-        }
-        return null;
     }
 
     public function getStates()
@@ -117,14 +72,40 @@ class Fsm implements FsmInterface, NameableInterface, PropertiableInterface
         return $this;
     }
 
-    public function hasTransitionByName($transitionName)
+    public function getTransitions()
     {
-        foreach ($this->transitions as $transition) {
-            if ($transition->getName() == $transitionName) {
-                return true;
+        return $this->transitions;
+    }
+
+    public function getInitialState()
+    {
+        foreach ($this->states as $state) {
+            if ($state->getIsInitial()) {
+                return $state;
             }
         }
-        return false;
+        return null;
+    }
+
+    public function getFinalStates()
+    {
+        $states = array();
+        foreach ($this->states as $state) {
+            if ($state->getIsFinal()) {
+                $states[] = $state;
+            }
+        }
+        return $states;
+    }
+
+    public function getStateByName($stateName)
+    {
+        foreach ($this->states as $state) {
+            if ($state->getName() == $stateName) {
+                return $state;
+            }
+        }
+        return null;
     }
 
     public function getTransitionByName($transitionName)
@@ -135,10 +116,5 @@ class Fsm implements FsmInterface, NameableInterface, PropertiableInterface
             }
         }
         return null;
-    }
-
-    public function getTransitions()
-    {
-        return $this->transitions;
     }
 }

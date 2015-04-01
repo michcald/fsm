@@ -1,6 +1,6 @@
 <?php
 
-namespace Michcald\Fsm\Exception;
+namespace Michcald\Fsm\Exception\Validator;
 
 use Michcald\Fsm\Model\Fsm;
 
