@@ -56,7 +56,7 @@ $fsm->addTransition($t3);
 $fsm->addTransition($t4);
 ```
 
-## The FSM Validator
+## The FSMValidator
 
 This component is in charge of validating the FSM after being populated with states and transitions.
 
@@ -90,6 +90,18 @@ try {
     printf('FSM <%s> is NOT valid%s', $fsm->getName(), PHP_EOL);
 }
 ```
+
+### FSM requirements
+
+These are the basic guidelines the validation of the FSM, however you can create your own validator from scratch or extending the default one in order to add more requirements.
+
+* The FSM **MUST** have an initial state
+* The FSM **CAN** have none or multiple final states
+* The FSM **MUST NOT** contain a duplicate state
+* The FSM **MUST NOT** contain a duplicate transition
+* The initial state **MUST NOT** appear in the end node of any transition
+* The final states **MUST NOT** appear in the start node of any transition
+* A transition **MUST NOT** contain undefined states
 
 ## The Stateful model
 
@@ -176,7 +188,3 @@ You can easily customize every single components:
 ## Examples
 
 You can find working examples in the `examples` folder.
-
-# Keep in touch
-
-Any questions, suggestions, pull reqs, etc. will be appreciated.
