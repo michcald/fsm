@@ -31,14 +31,27 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($finalStateName, $finalState->getName());
         $this->assertEquals(StateInterface::TYPE_FINAL, $finalState->getType());
+
+        $emptyName = '';
+        $emptyState = new State($emptyName, StateInterface::TYPE_NORMAL);
+
+        $this->assertEquals($emptyName, $emptyState->getName());
+        $this->assertEquals(StateInterface::TYPE_NORMAL, $emptyState->getType());
     }
 
-    public function testBad()
+    public function testProperty()
     {
-        $normalState1Name = '';
-        $normalState1 = new State($normalState1Name, StateInterface::TYPE_NORMAL);
+        $s1 = new State('s1', StateInterface::TYPE_INITIAL);
+        $s1
+            ->addProperty('color', 'blue')
+            ->addProperty('height', '')
+        ;
 
-        $this->assertEquals($normalState1Name, $normalState1->getName());
-        $this->assertEquals(StateInterface::TYPE_NORMAL, $normalState1->getType());
+        $this->assertEquals('blue', $s1->getProperty('color'));
+        $this->assertEmpty($s1->getProperty('heigth'));
+        $this->assertNull($s1->getProperty('width'));
+        $this->assertEquals('123', $s1->getProperty('width', '123'));
+        $this->assertFalse($s1->getProperty('width', false));
+        $this->assertEmpty($s1->getProperty('jasvd', ''));
     }
 }
