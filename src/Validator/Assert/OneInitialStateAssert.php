@@ -2,25 +2,30 @@
 
 namespace Michcald\Fsm\Validator\Assert;
 
-use Michcald\Fsm\Validator\ValidatorInterface;
-use Michcald\Fsm\Model\Fsm;
-use Michcald\Fsm\Model\Interfaces\StateInterface;
+use Michcald\Fsm\Validator\Assert\AssertInterface;
+use Michcald\Fsm\Model\Interfaces\FsmInterface;
+use Michcald\Fsm\Exception\Validator\Assert as Exception;
 
 /**
  * OneInitialStateAssert
  *
  * The FSM MUST have an initial state
  */
-class OneInitialStateAssert implements ValidatorInterface
+class OneInitialStateAssert implements AssertInterface
 {
-    public function validate(Fsm $fsm, $throwExceptions = true)
+    public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
         try {
-            $initialStatesCount = $fsm->countStatesByType(StateInterface::TYPE_INITIAL);
-            if ($initialStatesCount == 0) {
+            $count = 0;
+            foreach ($fsm->getStates() as $state) {
+                if ($state->getIsInitial()) {
+                    $count ++;
+                }
+            }
+            if ($count == 0) {
                 throw new Exception\MissingInitialStateException($fsm);
             }
-            if ($initialStatesCount > 1) {
+            if ($count > 1) {
                 throw new Exception\MultipleInitialStatesException($fsm);
             }
             return true;

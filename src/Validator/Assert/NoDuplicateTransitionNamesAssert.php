@@ -7,23 +7,23 @@ use Michcald\Fsm\Model\Interfaces\FsmInterface;
 use Michcald\Fsm\Exception\Validator\Assert as Exception;
 
 /**
- * NoDuplicateStatesAssert
+ * TransitionNamesDuplicatesAssert
  *
- * The FSM MUST NOT contain a duplicate state
+ * There MUST NOT be transitions with the same name starting from the same state
  */
-class NoDuplicateStatesAssert implements AssertInterface
+class NoDuplicateTransitionNamesAssert implements AssertInterface
 {
     public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
         try {
-            $statesNames = array();
-            foreach ($fsm->getStates() as $state) {
-                $statesNames[] = $state->getName();
+            $transitionsNames = array();
+            foreach ($fsm->getTransitions() as $transition) {
+                $transitionsNames[] = $transition->getName();
             }
 
-            $duplicateStates = $this->getDuplicates($statesNames);
-            foreach ($duplicateStates as $duplicateState) {
-                throw new Exception\DuplicateStateException($fsm, $duplicateState);
+            $duplicateTransitions = $this->getDuplicates($transitionsNames);
+            foreach ($duplicateTransitions as $duplicateTransition) {
+                throw new Exception\DuplicateTransitionException($fsm, $duplicateTransition);
             }
             return true;
         } catch (\Exception $e) {

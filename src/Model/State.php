@@ -18,11 +18,11 @@ class State implements StateInterface, NameableInterface, PropertiableInterface
 
     private $isFinal;
 
-    public function __construct($name)
+    public function __construct($name, $isInitial = false, $isFinal = false)
     {
         $this->name = $name;
-        $this->isInitial = false;
-        $this->isFinal = false;
+        $this->isInitial = (bool)$isInitial;
+        $this->isFinal = (bool)$isFinal;
     }
 
     public function setIsInitial($isInitial)

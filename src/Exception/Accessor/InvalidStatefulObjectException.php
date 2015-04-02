@@ -1,11 +1,11 @@
 <?php
 
-namespace Michcald\Fsm\Exception;
+namespace Michcald\Fsm\Exception\Accessor;
 
 use Michcald\Fsm\Accessor\AccessorInterface;
 use Michcald\Fsm\Stateful\StatefulInterface;
 
-class InvalidObjectForAccessorException extends \Exception
+class InvalidStatefulObjectException extends \Exception
 {
     public function __construct(AccessorInterface $accessor, StatefulInterface $object, $code = 0, $previous = null)
     {

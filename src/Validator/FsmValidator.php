@@ -3,20 +3,21 @@
 namespace Michcald\Fsm\Validator;
 
 use Michcald\Fsm\Validator\ValidatorInterface;
-use Michcald\Fsm\Model\Fsm;
+use Michcald\Fsm\Model\Interfaces\FsmInterface;
+use Michcald\Fsm\Validator\Assert\AssertInterface;
 
 class FsmValidator implements ValidatorInterface
 {
     private $asserts = array();
 
-    public function addAssert(ValidatorInterface $assert)
+    public function addAssert(AssertInterface $assert)
     {
         $this->asserts[] = $assert;
 
         return $this;
     }
 
-    public function validate(Fsm $fsm, $throwExceptions = true)
+    public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
         try {
             foreach ($this->asserts as $assert) {

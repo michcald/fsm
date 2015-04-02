@@ -9,17 +9,14 @@ class FsmTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $s1 = new State('s1');
-        $s1->setIsInitial(true);
+        $s1 = new State('s1', true);
         $s2 = new State('s2');
         $s3 = new State('s3');
         $s4 = new State('s4');
         $s5 = new State('s5');
         $s6 = new State('s6');
-        $s7 = new State('s7');
-        $s7->setIsFinal(true);
-        $s8 = new State('s8');
-        $s8->setIsFinal(true);
+        $s7 = new State('s7', false, true);
+        $s8 = new State('s8', false, true);
 
         $t1 = new Transition('t1', 's1', 's2');
         $t2 = new Transition('t2', 's1', 's3');

@@ -3,26 +3,24 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Michcald\Fsm\Model\Fsm;
-use Michcald\Fsm\Model\FsmState;
-use Michcald\Fsm\Model\FsmTransition;
-
-$states = array(
-    new FsmState('s1', FsmState::TYPE_INITIAL),
-    new FsmState('s2', FsmState::TYPE_NORMAL),
-    new FsmState('s3'),
-    new FsmState('s4', FsmState::TYPE_FINAL),
-);
-
-$transitions = array(
-    new FsmTransition('t1', 's1', 's2'),
-    new FsmTransition('t2', 's1', 's3'),
-    new FsmTransition('t3', 's3', 's1'),
-    new FsmTransition('t4', 's2', 's4'),
-);
+use Michcald\Fsm\Model\State;
+use Michcald\Fsm\Model\Transition;
 
 $fsm = new Fsm('fsm1');
-$fsm->setStates($states);
-$fsm->setTransitions($transitions);
+$fsm
+    ->setStates(array(
+        new State('s1', true),
+        new State('s2'),
+        new State('s3'),
+        new State('s4', false, true),
+    ))
+    ->setTransitions(array(
+        new Transition('t1', 's1', 's2'),
+        new Transition('t2', 's1', 's3'),
+        new Transition('t3', 's3', 's1'),
+        new Transition('t4', 's2', 's4'),
+    ))
+;
 
 printf('# FSM <%s>%s', $fsm->getName(), PHP_EOL);
 
@@ -33,7 +31,7 @@ foreach ($fsm->getStates() as $state) {
     printf(
         "State <%s> of type <%s>%s",
         $state->getName(),
-        $state->getType(),
+        $state->getIsInitial() ? 'INITIAL' : ($state->getIsFinal() ? 'FINAL' : 'NORMAL'),
         PHP_EOL
     );
 }

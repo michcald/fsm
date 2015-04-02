@@ -1,10 +1,10 @@
 <?php
 
-namespace Michcald\Fsm\Validator;
+namespace Michcald\Fsm\Validator\Assert;
 
 use Michcald\Fsm\Model\Interfaces\FsmInterface;
 
-interface ValidatorInterface
+interface AssertInterface
 {
     public function validate(FsmInterface $fsm, $throwExceptions = true);
 }

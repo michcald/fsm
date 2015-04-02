@@ -2,7 +2,6 @@
 
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Model\State;
-use Michcald\Fsm\Model\Interfaces\StateInterface;
 use Michcald\Fsm\Model\Transition;
 use Michcald\Fsm\Validator\FsmValidator;
 use Michcald\Fsm\Validator\Assert;
@@ -13,12 +12,10 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $fsm = new Fsm('fsm1');
 
-        $s1 = new State('s1');
-        $s1->setIsInitial(true);
+        $s1 = new State('s1', true);
         $s2 = new State('s2');
         $s3 = new State('s3');
-        $s4 = new State('s4');
-        $s4->setIsFinal(true);
+        $s4 = new State('s4', false, true);
 
         $t1 = new Transition('t1', 's1', 's2');
         $t2 = new Transition('t2', 's1', 's3');
@@ -43,17 +40,14 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function getNewValidFsm()
     {
-        $s1 = new State('s1');
-        $s1->setIsInitial(true);
+        $s1 = new State('s1', true);
         $s2 = new State('s2');
         $s3 = new State('s3');
         $s4 = new State('s4');
         $s5 = new State('s5');
         $s6 = new State('s6');
-        $s7 = new State('s7');
-        $s7->setIsFinal(true);
-        $s8 = new State('s8');
-        $s8->setIsFinal(true);
+        $s7 = new State('s7', false, true);
+        $s8 = new State('s8', false, true);
 
         $t1 = new Transition('t1', 's1', 's2');
         $t2 = new Transition('t2', 's1', 's3');
@@ -88,16 +82,97 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @todo
-     *
-     * @expectedException \Michcald\Fsm\Exception\Validator\StateNotFoundException
-     * @expectedExceptionMessageRegExp #State <.*> not found in FSM <.*>#
+     * @expectedException \Michcald\Fsm\Exception\Validator\Assert\MultipleInitialStatesException
      */
-    public function atestException()
+    public function testOneInitialStateAssertException1()
     {
-        $fsm = $this->getNewInvalidFsm();
+        $fsm = new Fsm('fsm');
+        $fsm->setStates(array(
+            new State('s1', true),
+            new State('s2', true),
+        ));
 
         $validator = new FsmValidator();
+        $validator->addAssert(new Assert\OneInitialStateAssert());
+        $validator->validate($fsm);
+    }
+
+    /**
+     * @expectedException \Michcald\Fsm\Exception\Validator\Assert\MissingInitialStateException
+     */
+    public function testOneInitialStateAssertException2()
+    {
+        $fsm = new Fsm('fsm');
+        $fsm->setStates(array(
+            new State('s1'),
+            new State('s2'),
+        ));
+
+        $validator = new FsmValidator();
+        $validator->addAssert(new Assert\OneInitialStateAssert());
+        $validator->validate($fsm);
+    }
+
+    /**
+     * @expectedException \Michcald\Fsm\Exception\Validator\Assert\UndefinedStateException
+     */
+    public function testNoTransitionWithUndefinedNamesAssertException()
+    {
+        $fsm = new Fsm('fsm');
+        $fsm
+            ->setStates(array(
+                new State('s1'),
+                new State('s2'),
+            ))
+            ->setTransitions(array(
+                new Transition('t1', 's1', 's2'),
+                new Transition('t2', 's2', 's3'),
+            ))
+        ;
+
+        $validator = new FsmValidator();
+        $validator->addAssert(new Assert\NoTransitionWithUndefinedStatesAssert());
+        $validator->validate($fsm);
+    }
+
+    /**
+     * @expectedException \Michcald\Fsm\Exception\Validator\Assert\DuplicateTransitionException
+     */
+    public function testNoDuplicateTransitionNamesAssertException()
+    {
+        $fsm = new Fsm('fsm');
+        $fsm
+            ->setStates(array(
+                new State('s1'),
+                new State('s2'),
+            ))
+            ->setTransitions(array(
+                new Transition('t1', 's1', 's2'),
+                new Transition('t1', 's2', 's3'),
+            ))
+        ;
+
+        $validator = new FsmValidator();
+        $validator->addAssert(new Assert\NoDuplicateTransitionNamesAssert());
+        $validator->validate($fsm);
+    }
+
+    /**
+     * @expectedException \Michcald\Fsm\Exception\Validator\Assert\DuplicateStateException
+     */
+    public function testNoDuplicateStateAssertException()
+    {
+        $fsm = new Fsm('fsm');
+        $fsm
+            ->setStates(array(
+                new State('s1', true),
+                new State('s1', false, true),
+                new State('s2'),
+            ))
+        ;
+
+        $validator = new FsmValidator();
+        $validator->addAssert(new Assert\NoDuplicateStatesAssert());
         $validator->validate($fsm);
     }
 
@@ -118,6 +193,4 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($validator->validate($fsm, false));
     }
-
-    // @todo test all the error messages of the exceptions
 }

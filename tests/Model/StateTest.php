@@ -7,6 +7,13 @@ class StateTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
+        $sName = 'stateNormal';
+        $s = new State($sName, false, false);
+
+        $this->assertEquals($sName, $s->getName());
+        $this->assertFalse($s->getIsFinal());
+        $this->assertFalse($s->getIsInitial());
+
         $s1Name = 'stateNormal';
         $s1 = new State($s1Name);
 
@@ -15,27 +22,21 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($s1->getIsInitial());
 
         $s2Name = 'stateInitial';
-        $s2 = new State($s2Name);
-        $s2->setIsInitial(true);
+        $s2 = new State($s2Name, true);
 
         $this->assertEquals($s2Name, $s2->getName());
         $this->assertTrue($s2->getIsInitial());
         $this->assertFalse($s2->getIsFinal());
 
         $s3Name = 'stateFinal';
-        $s3 = new State($s3Name);
-        $s3->setIsFinal(true);
+        $s3 = new State($s3Name, false, true);
 
         $this->assertEquals($s3Name, $s3->getName());
         $this->assertFalse($s3->getIsInitial());
         $this->assertTrue($s3->getIsFinal());
 
         $s4Name = 'stateFinalInitial';
-        $s4 = new State($s4Name);
-        $s4
-            ->setIsInitial(true)
-            ->setIsFinal(true)
-        ;
+        $s4 = new State($s4Name, true, true);
 
         $this->assertEquals($s4Name, $s4->getName());
         $this->assertTrue($s4->getIsInitial());

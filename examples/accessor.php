@@ -4,12 +4,12 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Model\State;
-use Michcald\Fsm\Model\Interfaces\StateInterface;
+use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Model\Transition;
 use Michcald\Fsm\Accessor\FsmAccessor;
 use Michcald\Fsm\Validator\FsmValidator;
 
-class Document implements \Michcald\Fsm\Stateful\StatefulInterface
+class Document implements StatefulInterface
 {
     private $myState;
 
@@ -30,10 +30,10 @@ class Document implements \Michcald\Fsm\Stateful\StatefulInterface
 $fsm = new Fsm('fsm1');
 
 $fsm->setStates(array(
-    new State('s1', StateInterface::TYPE_INITIAL),
-    new State('s2', StateInterface::TYPE_NORMAL),
-    new State('s3', StateInterface::TYPE_NORMAL),
-    new State('s4', StateInterface::TYPE_FINAL),
+    new State('s1', true),
+    new State('s2'),
+    new State('s3'),
+    new State('s4', false, true),
 ));
 
 $fsm->setTransitions(array(
@@ -51,6 +51,9 @@ $accessor = new FsmAccessor(
     'Document',         // the class name
     'myState'           // the property
 );
+
+// WARNING: use the validator in the accessor before to execute any operation
+// that might change the stateful object state
 
 $accessor->setInitialState($doc);
 

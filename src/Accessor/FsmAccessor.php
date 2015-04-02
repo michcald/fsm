@@ -5,8 +5,7 @@ namespace Michcald\Fsm\Accessor;
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
-use Michcald\Fsm\Exception;
-use Michcald\Fsm\Model\Interfaces\StateInterface;
+use Michcald\Fsm\Exception\Accessor;
 use Michcald\Fsm\Model\Interfaces\FsmInterface;
 
 class FsmAccessor implements AccessorInterface
@@ -77,11 +76,11 @@ class FsmAccessor implements AccessorInterface
     {
         // verifying the object class
         if (!is_a($object, $this->objectClass)) {
-            throw new Exception\InvalidObjectClassException($this->fsm, $this->objectClass, $object);
+            throw new Accessor\InvalidObjectClassException($this->fsm, $this->objectClass, $object);
         }
 
         if (!$object instanceof StatefulInterface) {
-            throw new Exception\InvalidObjectForAccessorException($this, $object);
+            throw new Accessor\InvalidObjectForAccessorException($this, $object);
         }
 
         $this
@@ -99,11 +98,11 @@ class FsmAccessor implements AccessorInterface
         ;
 
         if (!$transition) {
-            throw new Exception\TransitionNotFoundException($this->fsm, $transitionName);
+            throw new Accessor\TransitionNotFoundException($this->fsm, $transitionName);
         }
 
         if ($transition->getFromStateName() != $currentStateName) {
-            throw new Exception\InvalidTransitionException($this->fsm, $transition, $currentStateName);
+            throw new Accessor\InvalidTransitionException($this->fsm, $transition, $currentStateName);
         }
 
         // execute transition
@@ -140,9 +139,7 @@ class FsmAccessor implements AccessorInterface
         $propertyGetter = 'get' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertyGetter)) {
-            throw new \Exception(
-                sprintf('Invalid FSM getter <%s> for class <%s>', $propertyGetter, $this->objectClass)
-            );
+            throw new Accessor\InvalidStatefulPropertyException($this->fsm, $this);
         }
 
         return $object->$propertyGetter();
@@ -153,9 +150,7 @@ class FsmAccessor implements AccessorInterface
         $propertySetter = 'set' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertySetter)) {
-            throw new \Exception(
-                sprintf('Invalid FSM setter <%s> for class <%s>', $propertySetter, $this->objectClass)
-            );
+            throw new Accessor\InvalidStatefulPropertyException($this->fsm, $this);
         }
 
         $object->$propertySetter($stateName);
