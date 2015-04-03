@@ -1,6 +1,6 @@
 # FSM
 
-A Finite State Machine library (FSM) implementation for PHP.
+A Finite State Machine (FSM) implementation for PHP.
 
 # Installation (using composer)
 You can find the library in packagist [here](https://packagist.org/packages/michcald/fsm).
@@ -18,7 +18,7 @@ The library works with these main components:
 
 ## The Stateful Entity
 
-We define a *Stateful Entity* as a particular class in our business domain that has a property whose value can changed depending by a given FSM schema.
+We define a *Stateful Entity* as a particular class in our business domain that has a property whose value can change depending by a given FSM schema.
 
 For Doctrine users, this will be a normal Doctrine entity with a property with any particular type (as long as the type is pertinent with what the value will be).
 
@@ -54,15 +54,15 @@ use Michcald\Fsm\Model\Interfaces\StateInterface;
 $fsm = new Fsm('fsm1');
 
 $fsm
-    // new State($stateName, $isInitial = false, $isFinal = false)
     ->setStates(array(
+        // new State($stateName, $isInitial = false, $isFinal = false)
         new State('s1', true), // initial state
         new State('s2'),
         new State('s3'),
         new State('s4', false, true), // final state
     ))
-    // new Transition($transitionName, $fromStateName, $toStateName)
     ->setTransitions(array(
+        // new Transition($transitionName, $fromStateName, $toStateName)
         new Transition('t1', 's1', 's2'),
         new Transition('t2', 's1', 's3'),
         new Transition('t3', 's3', 's1'),
@@ -75,21 +75,21 @@ $fsm
 
 This component is really important as it is in charge of validating the FSM.
 
-This library does not define a specific validation for the FSM but provides few basic assert classes.
+This library does not define a specific validation for the FSM but provides few basic assert classes that can be added to the validator.
 
-An *Alert Class* is a class whose task is to validate a specific part of the FSM (e.g. if there is an initial state).
+An *Alert Class* is a class whose task is to validate a specific assert for the FSM (e.g. if the FSM requires an initial state).
 
-You can add ass many asserts as you want to the validator and you can also create your owns as long as they implement the following interface:
+The validator can contain as many asserts as you want. You can also create your owns as long as they implement the following interface:
 
 ```php
 use Michcald\Fsm\Validator\Assert\AssertInterface;
 ```
 
-The default behave of every assert should be throwing a specific exception, but you can Every assert can return just `true` or `false` if the second parameter is `true`.
+It's a good idea to create at least one new exception types for every Assert.
 
 
 ```php
-$fsm = // the FSM generated above
+// $fsm variable as defined above
 
 use Michcald\Fsm\Validator\FsmValidator;
 use Michcald\Fsm\Validator\Assert;
@@ -97,6 +97,7 @@ use Michcald\Fsm\Validator\Assert;
 // instanciating the validator
 $validator = new FsmValidator();
 
+// adding asserts to the validator
 $validator
     ->addAssert(new Assert\OneInitialStateAssert())
     ->addAssert(new Assert\NoDuplicateStatesAssert())
@@ -125,7 +126,7 @@ try {
 }
 ```
 
-You can easily create your own assert. Here an example which does not allow the initial state to be the final at the same time:
+You can easily create your own assert. Here an example that does not allow the initial state to be a final state at the same time:
 
 ```php
 namespace Michcald\Fsm\Validator\Assert;
@@ -159,17 +160,23 @@ class InitialStateCannotBeAlsoFinalAssert implements AssertInterface
 
 ## The Accessor
 
-The model component is just for defining the schema of the FSM but it does not include any logic to change the state of a Stateful Entity.
+The model component just defines the FSM's schema but it does not include any logic to change the state of a Stateful Entity.
 
 In order to execute transitions you need to use the Accessor component. 
 
 Every FSM requires at least one Accessor.
 
+The Accessor class requires:
+* the FSM object
+* the validator object
+* the Stateful class name
+* the Stateful class property that will contain the value of the current state. The class must provide the proper setter/getter `set{PropertyName}($value)` and `get{PropertyName}()`.
+
 The Accessor is in charge of:
 
 * using the validator to validate the FSM schema before every operation
-* initializing the state of your object
-* change the state of your object executing a transition
+* initializing the state of your Stateful entity
+* change the state of your Stateful entity executing a transition
 
 Getting back to the Stateful Entity:
 
@@ -196,7 +203,7 @@ class Document implements StatefulInterface
 }
 ```
 
-We then create the accessor object and use the FSM.
+We then create the accessor object and move the Stateful entity across transitions.
 
 ```php
 use Michcald\Fsm\Accessor\FsmAccessor;
@@ -238,7 +245,7 @@ You can easily customize every single components:
   * the Transition class - implementing `Michcald\Fsm\Model\Interfaces\TransitionInterface`
 * the accessor - implementing `Michcald\Fsm\Accessor\AccessorInterface`
 * the validator - implementing `Michcald\Fsm\Validator\ValidatorInterface`
-* the asserts -  - implementing `Michcald\Fsm\Validator\Assert\AssertInterface`
+* the asserts - implementing `Michcald\Fsm\Validator\Assert\AssertInterface`
 
 ## Examples
 

@@ -5,8 +5,8 @@ namespace Michcald\Fsm\Accessor;
 use Michcald\Fsm\Model\Fsm;
 use Michcald\Fsm\Stateful\StatefulInterface;
 use Michcald\Fsm\Validator\ValidatorInterface;
-use Michcald\Fsm\Exception\Accessor;
 use Michcald\Fsm\Model\Interfaces\FsmInterface;
+use Michcald\Fsm\Exception\Accessor;
 
 class FsmAccessor implements AccessorInterface
 {
@@ -74,15 +74,6 @@ class FsmAccessor implements AccessorInterface
 
     public function doTransition(StatefulInterface $object, $transitionName)
     {
-        // verifying the object class
-        if (!is_a($object, $this->objectClass)) {
-            throw new Accessor\InvalidObjectClassException($this->fsm, $this->objectClass, $object);
-        }
-
-        if (!$object instanceof StatefulInterface) {
-            throw new Accessor\InvalidObjectForAccessorException($this, $object);
-        }
-
         $this
             ->validator
             ->validate($this->fsm)
@@ -90,8 +81,14 @@ class FsmAccessor implements AccessorInterface
 
         $currentStateName = $this->getCurrentStateName($object);
 
-        // verify the transition
+        $transition = $this->getTransition($transitionName, $currentStateName);
 
+        // execute transition changing the state of the object
+        $this->setCurrentStateName($object, $transition->getToStateName());
+    }
+
+    private function getTransition($transitionName, $currentStateName)
+    {
         $transition = $this
             ->fsm
             ->getTransitionByName($transitionName)
@@ -105,9 +102,7 @@ class FsmAccessor implements AccessorInterface
             throw new Accessor\InvalidTransitionException($this->fsm, $transition, $currentStateName);
         }
 
-        // execute transition
-
-        $this->setCurrentStateName($object, $transition->getToStateName());
+        return $transition;
     }
 
     public function isInitialState(StatefulInterface $object)
@@ -136,6 +131,10 @@ class FsmAccessor implements AccessorInterface
 
     protected function getCurrentStateName(StatefulInterface $object)
     {
+        if (!is_a($object, $this->objectClass)) {
+            throw new Accessor\InvalidStatefulClassException($this->fsm, $this->objectClass, $object);
+        }
+
         $propertyGetter = 'get' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertyGetter)) {
@@ -147,6 +146,10 @@ class FsmAccessor implements AccessorInterface
 
     protected function setCurrentStateName(StatefulInterface $object, $stateName)
     {
+        if (!is_a($object, $this->objectClass)) {
+            throw new Accessor\InvalidStatefulClassException($this->fsm, $this->objectClass, $object);
+        }
+
         $propertySetter = 'set' . ucfirst($this->objectProperty);
 
         if (!method_exists($object, $propertySetter)) {
