@@ -17,21 +17,10 @@ class FsmValidator implements ValidatorInterface
         return $this;
     }
 
-    public function validate(FsmInterface $fsm, $throwExceptions = true)
+    public function validate(FsmInterface $fsm)
     {
-        try {
-            foreach ($this->asserts as $assert) {
-                $assert->validate($fsm, $throwExceptions);
-            }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
-            }
+        foreach ($this->asserts as $assert) {
+            $assert->validate($fsm);
         }
-
-        return true;
     }
 }

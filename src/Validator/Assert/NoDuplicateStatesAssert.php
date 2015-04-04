@@ -15,23 +15,14 @@ class NoDuplicateStatesAssert implements AssertInterface
 {
     public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
-        try {
-            $statesNames = array();
-            foreach ($fsm->getStates() as $state) {
-                $statesNames[] = $state->getName();
-            }
+        $statesNames = array();
+        foreach ($fsm->getStates() as $state) {
+            $statesNames[] = $state->getName();
+        }
 
-            $duplicateStates = $this->getDuplicates($statesNames);
-            foreach ($duplicateStates as $duplicateState) {
-                throw new Exception\DuplicateStateException($fsm, $duplicateState);
-            }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
-            }
+        $duplicateStates = $this->getDuplicates($statesNames);
+        foreach ($duplicateStates as $duplicateState) {
+            throw new Exception\DuplicateStateException($fsm, $duplicateState);
         }
     }
 

@@ -10,7 +10,7 @@ class NoDuplicateStatesTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Michcald\Fsm\Exception\Validator\Assert\DuplicateStateException
      * @expectedExceptionMessageRegExp #State <.*> is already used in FSM <.*>#
      */
-    public function testBadAssertWithExceptions()
+    public function testBadAssert()
     {
         $fsm = new Fsm('fsm');
         $fsm->setStates(array(
@@ -23,21 +23,6 @@ class NoDuplicateStatesTest extends \PHPUnit_Framework_TestCase
         $assert->validate($fsm);
     }
 
-    public function testBadAssert()
-    {
-        $fsm = new Fsm('fsm');
-        $fsm->setStates(array(
-            new State('s1'),
-            new State('s2'),
-            new State('s1'),
-        ));
-
-        $assert = new NoDuplicateStatesAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertFalse($result);
-    }
-
     public function testGoodAssert()
     {
         $fsm = new Fsm('fsm');
@@ -48,8 +33,6 @@ class NoDuplicateStatesTest extends \PHPUnit_Framework_TestCase
         ));
 
         $assert = new NoDuplicateStatesAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertTrue($result);
+        $assert->validate($fsm);
     }
 }

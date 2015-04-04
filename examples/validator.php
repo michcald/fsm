@@ -27,7 +27,7 @@ $fsm
 // validating the FSM
 $validator = new FsmValidator();
 
-$isValid = $validator->validate($fsm, false);
+$isValid = $validator->validate($fsm);
 
 if ($isValid) {
     printf('FSM <%s> is valid%s', $fsm->getName(), PHP_EOL);

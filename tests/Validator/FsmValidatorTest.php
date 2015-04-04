@@ -180,17 +180,17 @@ class FsmValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $fsm = $this->getNewInvalidFsm();
         $validator = new FsmValidator();
-        $this->assertTrue($validator->validate($fsm, false));
+        $validator->validate($fsm);
 
         $fsm = $this->getNewValidFsm();
         $validator = new FsmValidator();
-        $this->assertTrue($validator->validate($fsm, false));
+        $validator->validate($fsm);
 
         // build up the validator adding asserts
         $fsm = $this->getNewValidFsm();
         $validator = new FsmValidator();
         $validator->addAssert(new Assert\NoDuplicateStatesAssert());
 
-        $this->assertTrue($validator->validate($fsm, false));
+        $validator->validate($fsm);
     }
 }

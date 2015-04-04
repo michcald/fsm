@@ -10,7 +10,7 @@ class OneInitialStateTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Michcald\Fsm\Exception\Validator\Assert\MissingInitialStateException
      * @expectedExceptionMessageRegExp #FSM <.*> must have an initial state#
      */
-    public function testNoInitialStateWithExceptions()
+    public function testNoInitialState()
     {
         $fsm = new Fsm('fsm');
         $fsm->setStates(array(
@@ -27,7 +27,7 @@ class OneInitialStateTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Michcald\Fsm\Exception\Validator\Assert\MultipleInitialStatesException
      * @expectedExceptionMessageRegExp #FSM <.*> has multiple initial states#
      */
-    public function testMultipleInitialStatesWithExceptions()
+    public function testMultipleInitialStates()
     {
         $fsm = new Fsm('fsm');
         $fsm->setStates(array(
@@ -40,21 +40,6 @@ class OneInitialStateTest extends \PHPUnit_Framework_TestCase
         $assert->validate($fsm);
     }
 
-    public function testBadAssert()
-    {
-        $fsm = new Fsm('fsm');
-        $fsm->setStates(array(
-            new State('s1', false),
-            new State('s2'),
-            new State('s1'),
-        ));
-
-        $assert = new OneInitialStateAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertFalse($result);
-    }
-
     public function testGoodAssert()
     {
         $fsm = new Fsm('fsm');
@@ -65,8 +50,6 @@ class OneInitialStateTest extends \PHPUnit_Framework_TestCase
         ));
 
         $assert = new OneInitialStateAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertTrue($result);
+        $assert->validate($fsm);
     }
 }

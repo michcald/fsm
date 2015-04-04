@@ -13,28 +13,19 @@ use Michcald\Fsm\Exception\Validator\Assert as Exception;
  */
 class OneInitialStateAssert implements AssertInterface
 {
-    public function validate(FsmInterface $fsm, $throwExceptions = true)
+    public function validate(FsmInterface $fsm)
     {
-        try {
-            $count = 0;
-            foreach ($fsm->getStates() as $state) {
-                if ($state->getIsInitial()) {
-                    $count ++;
-                }
+        $count = 0;
+        foreach ($fsm->getStates() as $state) {
+            if ($state->getIsInitial()) {
+                $count ++;
             }
-            if ($count == 0) {
-                throw new Exception\MissingInitialStateException($fsm);
-            }
-            if ($count > 1) {
-                throw new Exception\MultipleInitialStatesException($fsm);
-            }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
-            }
+        }
+        if ($count == 0) {
+            throw new Exception\MissingInitialStateException($fsm);
+        }
+        if ($count > 1) {
+            throw new Exception\MultipleInitialStatesException($fsm);
         }
     }
 }

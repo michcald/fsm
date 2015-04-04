@@ -6,5 +6,5 @@ use Michcald\Fsm\Model\Interfaces\FsmInterface;
 
 interface ValidatorInterface
 {
-    public function validate(FsmInterface $fsm, $throwExceptions = true);
+    public function validate(FsmInterface $fsm);
 }

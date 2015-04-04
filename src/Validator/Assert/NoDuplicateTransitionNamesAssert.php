@@ -15,23 +15,14 @@ class NoDuplicateTransitionNamesAssert implements AssertInterface
 {
     public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
-        try {
-            $transitionsNames = array();
-            foreach ($fsm->getTransitions() as $transition) {
-                $transitionsNames[] = $transition->getName();
-            }
+        $transitionsNames = array();
+        foreach ($fsm->getTransitions() as $transition) {
+            $transitionsNames[] = $transition->getName();
+        }
 
-            $duplicateTransitions = $this->getDuplicates($transitionsNames);
-            foreach ($duplicateTransitions as $duplicateTransition) {
-                throw new Exception\DuplicateTransitionException($fsm, $duplicateTransition);
-            }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
-            }
+        $duplicateTransitions = $this->getDuplicates($transitionsNames);
+        foreach ($duplicateTransitions as $duplicateTransition) {
+            throw new Exception\DuplicateTransitionException($fsm, $duplicateTransition);
         }
     }
 

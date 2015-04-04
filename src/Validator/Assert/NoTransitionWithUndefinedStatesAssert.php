@@ -15,21 +15,12 @@ class NoTransitionWithUndefinedStatesAssert implements AssertInterface
 {
     public function validate(FsmInterface $fsm, $throwExceptions = true)
     {
-        try {
-            foreach ($fsm->getTransitions() as $transition) {
-                if (!$fsm->getStateByName($transition->getFromStateName())) {
-                    throw new Exception\UndefinedStateException($fsm, $transition, $transition->getFromStateName());
-                }
-                if (!$fsm->getStateByName($transition->getToStateName())) {
-                    throw new Exception\UndefinedStateException($fsm, $transition, $transition->getToStateName());
-                }
+        foreach ($fsm->getTransitions() as $transition) {
+            if (!$fsm->getStateByName($transition->getFromStateName())) {
+                throw new Exception\UndefinedStateException($fsm, $transition, $transition->getFromStateName());
             }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
+            if (!$fsm->getStateByName($transition->getToStateName())) {
+                throw new Exception\UndefinedStateException($fsm, $transition, $transition->getToStateName());
             }
         }
     }

@@ -11,7 +11,7 @@ class NoDuplicateTransitionNamesTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Michcald\Fsm\Exception\Validator\Assert\DuplicateTransitionException
      * @expectedExceptionMessageRegExp #Transition <.*> is already used in FSM <.*>#
      */
-    public function testBadAssertWithExceptions()
+    public function testBadAssert()
     {
         $fsm = new Fsm('fsm');
         $fsm
@@ -30,27 +30,6 @@ class NoDuplicateTransitionNamesTest extends \PHPUnit_Framework_TestCase
         $assert->validate($fsm);
     }
 
-    public function testBadAssert()
-    {
-        $fsm = new Fsm('fsm');
-        $fsm
-            ->setStates(array(
-                new State('s1'),
-                new State('s2'),
-                new State('s3'),
-            ))
-            ->setTransitions(array(
-                new Transition('t1', 's1', 's2'),
-                new Transition('t1', 's2', 's3'),
-            ))
-        ;
-
-        $assert = new NoDuplicateTransitionNamesAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertFalse($result);
-    }
-
     public function testGoodAssert()
     {
         $fsm = new Fsm('fsm');
@@ -67,8 +46,6 @@ class NoDuplicateTransitionNamesTest extends \PHPUnit_Framework_TestCase
         ;
 
         $assert = new NoDuplicateTransitionNamesAssert();
-        $result = $assert->validate($fsm, false);
-
-        $this->assertTrue($result);
+        $assert->validate($fsm, false);
     }
 }
