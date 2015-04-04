@@ -18,32 +18,29 @@ The library works with these main components:
 
 ## The Stateful Entity
 
-We define a *Stateful Entity* as a particular class in our business domain that has a property whose value can change depending by a given FSM schema.
+We define a *Stateful Entity* as a particular class in your business domain that has a property which value can change depending by a given FSM schema.
 
-For Doctrine users, this will be a normal Doctrine entity with a property with any particular type (as long as the type is pertinent with what the value will be).
+For Doctrine users this will be a normal Doctrine entity having a property of any type.
 
-The Stateful Entity MUST implement the following interface:
-
-```php
-use Michcald\Fsm\Stateful\StatefulInterface;
-```
-
-This library supports multiple properties related to mulitple FSMs for the same Stateful Entity.
+The *Stateful Entity* MUST implement the following interface:
 
 ```php
 use Michcald\Fsm\Stateful\StatefulInterface;
 
 class Document implements StatefulInterface
 {
-    private $state1;
-
-    private $state2;
+    // this property will contain the current state of the entity
+    private $state;
 }
 ```
 
+### Multiple FMSs for the same Stateful Entity
+
+Sometimes you can find yourself in a situation where your *Stateful Entity* might have more than one states related to different FSMs. In this case just add a new property and specify it when instanciating the accessor for the proper FSM (see below).
+
 ## The Model
 
-The model consists in the base classes for creating a FSM (FSM, states and transitions).
+The model consists in the base classes for creating a FSM (FSM, states and transitions). No restrictions are applied at this step, every is allowed, this means that no validation check is performed yet.
 
 ```php
 use Michcald\Fsm\Model\Fsm;
@@ -51,7 +48,7 @@ use Michcald\Fsm\Model\State;
 use Michcald\Fsm\Model\Transition;
 use Michcald\Fsm\Model\Interfaces\StateInterface;
 
-$fsm = new Fsm('fsm1');
+$fsm = new Fsm('my_fsm');
 
 $fsm
     ->setStates(array(
@@ -71,21 +68,27 @@ $fsm
 ;
 ```
 
-## The FSMValidator
+You can also add new states/transitions using the methods `addState($state)` and `addTransition($transition)`.
 
-This component is really important as it is in charge of validating the FSM.
+## The Validator
 
-This library does not define a specific validation for the FSM but provides few basic assert classes that can be added to the validator.
+This component is really important as it is in charge of validating the FSM schema.
 
-An *Alert Class* is a class whose task is to validate a specific assert for the FSM (e.g. if the FSM requires an initial state).
+### Asserts
 
-The validator can contain as many asserts as you want. You can also create your owns as long as they implement the following interface:
+The default validator itself does not validate anything, but is a container of asserts. 
+
+Every Assert class is supposed to validate a specific assert for the FSM.
+
+The validator task is to go through all of the asserts and validate them (e.g. if the FSM can have a single initial state).
+
+The library provides some basic asserts that you can use, but you can create your owns, as long as they implement the following interface:
 
 ```php
 use Michcald\Fsm\Validator\Assert\AssertInterface;
 ```
 
-It's a good idea to create at least one new exception types for every Assert.
+It's a good idea to create at least one new exception type for every Assert class.
 
 
 ```php
@@ -105,19 +108,9 @@ $validator
     ->addAssert(new Assert\NoTransitionWithUndefinedStatesAssert())
 ;
 
-// validating without throwing exceptions
-$isValid = $validator->validate($fsm, false);
-
-if ($isValid) {
-    printf('FSM <%s> is valid%s', $fsm->getName(), PHP_EOL);
-} else {
-    printf('FSM <%s> is NOT valid%s', $fsm->getName(), PHP_EOL);
-}
-
 // adding an invalid transition
 $fsm->addTransition(new FsmTransition('t1', 's1', 's2'));
 
-// validating throwing exceptions
 try {
     $validator->validate($fsm);
     printf('FSM <%s> is valid%s', $fsm->getName(), PHP_EOL);
@@ -126,7 +119,7 @@ try {
 }
 ```
 
-You can easily create your own assert. Here an example that does not allow the initial state to be a final state at the same time:
+You can easily create your own assert. Here is an example that does not allow the initial state to be a final state at the same time:
 
 ```php
 namespace Michcald\Fsm\Validator\Assert;
@@ -137,21 +130,12 @@ use Michcald\Fsm\Exception\Validator\Assert as Exception;
 
 class InitialStateCannotBeAlsoFinalAssert implements AssertInterface
 {
-    public function validate(FsmInterface $fsm, $throwExceptions = true)
+    public function validate(FsmInterface $fsm)
     {
-        try {
-            $count = 0;
-            foreach ($fsm->getStates() as $state) {
-                if ($state->getIsInitial() && $state->getIsFinal()) {
-                    throw new Exception\InitialStateCannotBeAlsoFinalException($fsm, $state);
-                }
-            }
-            return true;
-        } catch (\Exception $e) {
-            if ($throwExceptions) {
-                throw $e;
-            } else {
-                return false;
+        $count = 0;
+        foreach ($fsm->getStates() as $state) {
+            if ($state->getIsInitial() && $state->getIsFinal()) {
+                throw new Exception\InitialStateCannotBeAlsoFinalException($fsm, $state);
             }
         }
     }
