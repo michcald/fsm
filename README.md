@@ -146,6 +146,10 @@ class InitialStateCannotBeAlsoFinalAssert implements AssertInterface
 }
 ```
 
+### NFA and DFA Asserts
+
+You can find two extra composite asserts for validating an FSM as a NFA or DFA. These asserts are actually using other asserts.
+
 ## The Accessor
 
 The model component just defines the FSM's schema but it does not include any logic to change the state of a Stateful Entity.
