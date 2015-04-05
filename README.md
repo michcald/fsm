@@ -7,11 +7,15 @@ You can use this library for creating:
 * [NFA](http://en.wikipedia.org/wiki/Nondeterministic_finite_automaton) - Nondeterministic Finite Automaton
 
 # Installation (using composer)
+
 You can find the library in packagist [here](https://packagist.org/packages/michcald/fsm).
-```
+
+The last stable release is `v1.0.1`.
+
+```json
 {
   "require": {
-    "michcald/fsm": "dev-master"
+    "michcald/fsm": "1.0.*"
   }
 }
 ```
