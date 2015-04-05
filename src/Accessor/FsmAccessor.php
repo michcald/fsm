@@ -40,11 +40,21 @@ class FsmAccessor implements AccessorInterface
         return $this;
     }
 
+    public function getObjectClass()
+    {
+        return $this->objectClass;
+    }
+
     public function setObjectProperty($objectProperty)
     {
         $this->objectProperty = $objectProperty;
 
         return $this;
+    }
+
+    public function getObjectProperty()
+    {
+        return $this->objectProperty;
     }
 
     public function setValidator(ValidatorInterface $validator)
@@ -85,6 +95,8 @@ class FsmAccessor implements AccessorInterface
 
         // execute transition changing the state of the object
         $this->setCurrentStateName($object, $transition->getToStateName());
+
+        return $this;
     }
 
     private function getTransition($transitionName, $currentStateName)

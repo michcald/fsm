@@ -12,7 +12,11 @@ interface AccessorInterface
 
     public function setObjectClass($objectClass);
 
+    public function getObjectClass();
+
     public function setObjectProperty($objectProperty);
+
+    public function getObjectProperty();
 
     public function setValidator(ValidatorInterface $validator);
 
