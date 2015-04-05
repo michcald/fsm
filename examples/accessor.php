@@ -44,6 +44,7 @@ $fsm->setTransitions(array(
 ));
 
 $doc = new Document();
+$doc->setMyState('s1');
 
 $accessor = new FsmAccessor(
     $fsm,               // the FSM
@@ -51,11 +52,6 @@ $accessor = new FsmAccessor(
     'Document',         // the class name
     'myState'           // the property
 );
-
-// WARNING: use the validator in the accessor before to execute any operation
-// that might change the stateful object state
-
-$accessor->setInitialState($doc);
 
 try {
     if ($accessor->isInitialState($doc)) {

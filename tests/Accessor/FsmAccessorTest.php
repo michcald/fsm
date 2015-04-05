@@ -30,11 +30,10 @@ class FsmAccessorTest extends \PHPUnit_Framework_TestCase
         $validator = new FsmValidator();
         $validator->validate($fsm);
 
-        $accessor = new FsmAccessor($fsm, $validator, 'Document', 'myState2');
-
         $obj = new Document();
-        $accessor->setInitialState($obj);
+        $obj->setMyState('s1');
 
+        $accessor = new FsmAccessor($fsm, $validator, 'Document', 'myState2');
         $accessor->doTransition($obj, 't1');
     }
 
@@ -59,11 +58,10 @@ class FsmAccessorTest extends \PHPUnit_Framework_TestCase
         $validator = new FsmValidator();
         $validator->validate($fsm);
 
-        $accessor = new FsmAccessor($fsm, $validator, 'Document2', 'myState');
-
         $obj = new Document();
-        $accessor->setInitialState($obj);
+        $obj->setMyState('s1');
 
+        $accessor = new FsmAccessor($fsm, $validator, 'Document2', 'myState');
         $accessor->doTransition($obj, 't1');
     }
 
@@ -72,11 +70,10 @@ class FsmAccessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidTransitionValue()
     {
-        $accessor = $this->newAccessor();
-
         $obj = new Document();
-        $accessor->setInitialState($obj);
+        $obj->setMyState('s1');
 
+        $accessor = $this->newAccessor();
         $accessor
             ->doTransition($obj, 't2')
             ->doTransition($obj, 't5')
@@ -90,11 +87,10 @@ class FsmAccessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFounTransitionValue()
     {
-        $accessor = $this->newAccessor();
-
         $obj = new Document();
-        $accessor->setInitialState($obj);
+        $obj->setMyState('s1');
 
+        $accessor = $this->newAccessor();
         $accessor
             ->doTransition($obj, 't2')
             ->doTransition($obj, 't8')
@@ -105,11 +101,10 @@ class FsmAccessorTest extends \PHPUnit_Framework_TestCase
 
     public function testGoodValue()
     {
-        $accessor = $this->newAccessor();
-
         $obj = new Document();
-        $accessor->setInitialState($obj);
+        $obj->setMyState('s1');
 
+        $accessor = $this->newAccessor();
         $accessor
             ->doTransition($obj, 't2')
             ->doTransition($obj, 't3')

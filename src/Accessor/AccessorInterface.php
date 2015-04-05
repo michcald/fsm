@@ -20,8 +20,6 @@ interface AccessorInterface
 
     public function setValidator(ValidatorInterface $validator);
 
-    public function setInitialState(StatefulInterface $object);
-
     public function doTransition(StatefulInterface $object, $transitionName);
 
     public function isInitialState(StatefulInterface $object);

@@ -64,24 +64,6 @@ class FsmAccessor implements AccessorInterface
         return $this;
     }
 
-    public function setInitialState(StatefulInterface $object)
-    {
-        $this
-            ->validator
-            ->validate($this->fsm)
-        ;
-
-        $this->setCurrentStateName(
-            $object,
-            $this
-                ->fsm
-                ->getInitialState()
-                ->getName()
-        );
-
-        return $this;
-    }
-
     public function doTransition(StatefulInterface $object, $transitionName)
     {
         $this

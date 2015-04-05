@@ -50,7 +50,7 @@ class FsmTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(8, $fsm1->getStates());
         $this->assertCount(8, $fsm1->getTransitions());
 
-        $this->assertNotNull($fsm1->getInitialState());
+        $this->assertCount(1, $fsm1->getInitialStates());
         $this->assertCount(2, $fsm1->getFinalStates());
 
         $this->assertNotNull($fsm1->getStateByName('s4'));
@@ -60,8 +60,6 @@ class FsmTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($fsm1->getTransitionByName('t7'));
         $this->assertNull($fsm1->getTransitionByName('t31'));
         $this->assertNull($fsm1->getTransitionByName(''));
-
-        $this->assertEquals('s1', $fsm1->getInitialState()->getName());
     }
 
     public function testBadCreate()
@@ -79,7 +77,7 @@ class FsmTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $fsm1->getStates());
         $this->assertCount(1, $fsm1->getTransitions());
 
-        $this->assertNull($fsm1->getInitialState());
+        $this->assertCount(0, $fsm1->getInitialStates());
         $this->assertCount(0, $fsm1->getFinalStates());
 
         $this->assertNull($fsm1->getStateByName('s4'));

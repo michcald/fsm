@@ -21,7 +21,7 @@ interface FsmInterface
 
     //
 
-    public function getInitialState();
+    public function getInitialStates();
 
     public function getFinalStates();
 

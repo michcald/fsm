@@ -77,14 +77,15 @@ class Fsm implements FsmInterface, NameableInterface, PropertiableInterface
         return $this->transitions;
     }
 
-    public function getInitialState()
+    public function getInitialStates()
     {
+        $states = array();
         foreach ($this->states as $state) {
             if ($state->getIsInitial()) {
-                return $state;
+                $states[] = $state;
             }
         }
-        return null;
+        return $states;
     }
 
     public function getFinalStates()
